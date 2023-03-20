@@ -7,4 +7,6 @@ class ColorResources{
   static const Color errorText = Colors.redAccent;
   static const Color secondaryColor = Color(0xff000000);
   static const Color linkColor = Color(0xff477CBA);
+  static const Color ahaduBankColor = Color(0xff911531);
+  static const Color blurColor = Color.fromRGBO(0, 0, 0, 0.25);
 }

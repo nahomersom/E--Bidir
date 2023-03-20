@@ -23,6 +23,11 @@ ThemeData lightTheme = ThemeData(
         fontWeight: FontWeight.w500,
       fontSize: 15
     ),
+    labelMedium: TextStyle(
+      fontFamily: 'Poppins',
+      color: Colors.white,
+      fontSize: 13
+    ),
     titleLarge: TextStyle(
         fontFamily: 'Poppins',
         color: Colors.white,
