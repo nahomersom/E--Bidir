@@ -44,10 +44,10 @@ dev_dependencies:
 
 flutter_native_splash:
   fullScreen: true
-  background_image: assets/images/Splash_image.png
+  background_image: assets/images/Splash_icon.png
   android_12:
     fullScreen: true
-    image: assets/images/Splash_image.png
+    image: assets/images/Splash_icon.png
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -67,9 +67,17 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     - assets/images/splash_icon.png
+     - assets/images/logo.png
   #   - images/a_dot_ham.jpeg
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter/static/Inter-Regular.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
