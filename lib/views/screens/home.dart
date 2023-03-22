@@ -1,9 +1,8 @@
 import 'package:e_bidir/utils/color_resource.dart';
 import 'package:e_bidir/views/screens/dashboard.dart';
+import 'package:e_bidir/views/screens/loan_request.dart';
 import 'package:e_bidir/views/screens/user.dart';
 import 'package:flutter/material.dart';
-
-import 'loan.dart';
 class HomeScreen extends StatefulWidget {
 
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,13 +12,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    int _currentIndex = 0;
+
 
     List<Widget> pages = [
-      const Dashboard(),
-      const Loan(),
+       Dashboard(),
+      const LoanRequest(),
       const User(),
 
 
@@ -31,6 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
         children: pages,
       ),
       bottomNavigationBar:BottomNavigationBar(
+        selectedItemColor: ColorResources.accentColor,
+        selectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
 
         backgroundColor: ColorResources.scaffoldColor,
         currentIndex: _currentIndex,
@@ -38,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
         iconSize: 35,
         onTap: (index)=>{
           setState((){
+
             _currentIndex = index;
+
           })
 
         },
@@ -50,11 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag),
-              activeIcon: Icon(Icons.menu_book_sharp),
+              activeIcon: Icon(Icons.shopping_bag),
               label:'Loan'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              activeIcon: Icon(Icons.menu_book_sharp),
+
               label:'User'),
         ],
 

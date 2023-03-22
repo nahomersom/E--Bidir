@@ -6,12 +6,7 @@ import 'package:flutter/services.dart';
 import 'helpers/route_helper.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: ColorResources.scaffoldColor,
-      statusBarIconBrightness: Brightness.dark
-    ),
-  );
+  Paint.enableDithering = true;
   runApp(const MyApp());
 }
 
@@ -23,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+
       title: 'E-bidir',
       theme:lightTheme,
       debugShowCheckedModeBanner: false,

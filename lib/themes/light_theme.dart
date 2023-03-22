@@ -2,6 +2,7 @@ import 'package:e_bidir/utils/color_resource.dart';
 import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
+  fontFamily: 'Poppins',
   scaffoldBackgroundColor: ColorResources.scaffoldColor,
   textTheme:  const TextTheme(
     headlineLarge: TextStyle(
@@ -16,6 +17,11 @@ ThemeData lightTheme = ThemeData(
         color: ColorResources.lightTextColor,
 
       fontWeight: FontWeight.w500
+    ),
+    headlineMedium: TextStyle(
+      fontFamily: 'Poppins',
+      color: ColorResources.accentColor,
+      fontWeight: FontWeight.bold
     ),
     labelLarge: TextStyle(
         fontFamily: 'Poppins',
@@ -33,5 +39,10 @@ ThemeData lightTheme = ThemeData(
         color: Colors.white,
         fontSize: 20
     ),
+    titleSmall: TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.bold,
+      fontSize: 15
+    )
   ),
 );
