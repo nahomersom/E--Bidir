@@ -1,4 +1,5 @@
 
+import 'package:e_bidir/helpers/route_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -71,6 +72,9 @@ class Dashboard extends StatelessWidget {
                   onTap: () {
                     // Update the state of the app.
                     // ...
+                    Navigator.pushNamed(context, RouteHelper.myLoans,
+                      arguments:'My Loans',
+                    );
                   },
                 ),
                 SizedBox(height: 10,),
@@ -85,22 +89,24 @@ class Dashboard extends StatelessWidget {
                   onTap: () {
                     // Update the state of the app.
                     // ...
+                    Navigator.pushNamed(context, RouteHelper.myCollaterals,  arguments:  'Collaterals');
                   },
                 ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.account_balance,color: Color(0xff3A58A5)),
-                  ),
-                  title:  Text('Available Banks',style: _textTheme.titleLarge?.copyWith(
-                      fontSize: 18
-                  ),),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
+                // SizedBox(height: 10,),
+                // // ListTile(
+                // //   leading: CircleAvatar(
+                // //     backgroundColor: ColorResources.iconBackgroundColor,
+                // //     child: Icon(Icons.account_balance,color: Color(0xff3A58A5)),
+                // //   ),
+                // //   title:  Text('Available Banks',style: _textTheme.titleLarge?.copyWith(
+                // //       fontSize: 18
+                // //   ),),
+                // //   onTap: () {
+                // //     // Update the state of the app.
+                // //     // ...
+                // //     Navigator.pushNamed(context, RouteHelper.availableBanks,  arguments: 'Available Banks',);
+                // //   },
+                // // ),
                 SizedBox(height: 10,),
                 ListTile(
                   leading: CircleAvatar(
@@ -127,6 +133,7 @@ class Dashboard extends StatelessWidget {
                   onTap: () {
                     // Update the state of the app.
                     // ...
+
                   },
                 ),
                 SizedBox(height: 10,),
@@ -139,8 +146,7 @@ class Dashboard extends StatelessWidget {
                       fontSize: 18
                   ),),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
+                    Navigator.pushReplacementNamed(context, RouteHelper.login);
                   },
                 ),
               ],
@@ -175,10 +181,12 @@ class Dashboard extends StatelessWidget {
                                 onPressed: () => _key.currentState!.openDrawer(),
                             ),
 
-                           SizedBox(width: screenWidth * 0.05,),
-                           SizedBox(
-                             width: screenWidth * 0.75,
-                             child:  Image.asset('assets/images/logo.png'),
+                           SizedBox(width: screenWidth * 0.03,),
+                           Expanded(
+                             child: SizedBox(
+                               width: screenWidth * 0.75,
+                               child:  Image.asset('assets/images/logo.png'),
+                             ),
                            )
                           ],
                         ),

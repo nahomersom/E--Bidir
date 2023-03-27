@@ -7,6 +7,7 @@ class SharedTextField extends StatelessWidget {
     required TextTheme textTheme,
     required this.textEditingController,
     this.inputType = 'text',
+    this.isFormSubmitted = false,
     required this.label,required this.placeholder, required this.prefixIcon, this.suffixIcon,
   }) : _textTheme = textTheme;
 
@@ -16,6 +17,7 @@ class SharedTextField extends StatelessWidget {
   final Icon prefixIcon;
   final Icon? suffixIcon;
   final String inputType;
+  final bool isFormSubmitted;
   final TextEditingController textEditingController;
 
   @override
@@ -30,11 +32,14 @@ class SharedTextField extends StatelessWidget {
           Text(label,style: _textTheme.labelLarge,),
           SizedBox(height: 10,),
           TextField(
+            controller: textEditingController,
             keyboardType:  inputType  == 'phone' ? TextInputType.phone : TextInputType.text,
            obscureText: inputType  == 'phone' ? false : true ,
+
             decoration: InputDecoration(
               hintText: placeholder,
               prefixIcon: prefixIcon,
+              errorText: isFormSubmitted && textEditingController.text.isEmpty ? 'This field is required' : null,
               border: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ColorResources.secondaryColor, width: 1.0

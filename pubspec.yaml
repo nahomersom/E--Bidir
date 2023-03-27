@@ -40,6 +40,9 @@ dependencies:
   http: ^0.13.5
   flutter_spinkit: ^5.1.0
   flutter_secure_storage: ^8.0.0
+  file_picker: ^5.2.6
+  syncfusion_flutter_datagrid: ^21.1.35
+
 
 
 dev_dependencies:
@@ -49,12 +52,12 @@ dev_dependencies:
 
 flutter_native_splash:
   fullScreen: true
-  background_image: assets/images/Splash_icon.png
+  image: assets/images/l_icon.png
   color: "#ffffff"
   android_12:
     fullScreen: true
     color: "#ffffff"
-    image: assets/images/Splash_icon.png
+    image: assets/images/l_icon.png
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
