@@ -42,6 +42,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   file_picker: ^5.2.6
   syncfusion_flutter_datagrid: ^21.1.35
+  shimmer: ^2.0.0
 
 
 

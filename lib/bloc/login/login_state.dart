@@ -1,29 +1,33 @@
-import 'package:e_bidir/data/model/login_model.dart';
-import 'package:equatable/equatable.dart';
 
 
-enum loginStatus {initial,loading,success,error,selected}
+part of 'login_bloc.dart';
+//autenticated and authenticated
+enum LoginStatus {initial,loading,success,error}
 
-extension LoginStatusx on loginStatus{
-  bool get isInitial => this == loginStatus.initial;
-  bool get isLoading => this == loginStatus.loading;
-  bool get  isSuccess => this == loginStatus.success;
-  bool get isSelected => this == loginStatus.selected;
-  bool get hasError => this == loginStatus.error;
+extension LoginStatusx on LoginStatus{
+  bool get isInitial => this == LoginStatus.initial;
+  bool get isLoading => this == LoginStatus.loading;
+  bool get  isSuccess => this == LoginStatus.success;
+  bool get hasError => this == LoginStatus.error;
 
 }
 class LoginState extends Equatable{
+   LoginState({
+    this.status = LoginStatus.initial,
+    LoginModel? user,
+    required this.errorMessage,
+   }):user = user;
 
-  const LoginState({this.status = loginStatus.initial,List<LoginModel>? loginData}):loginData = loginData ?? const [];
 
-  final List<LoginModel> loginData;
-  final loginStatus status;
+  final LoginModel? user;
+  final String errorMessage;
+  final LoginStatus status;
 
   @override
-  List<Object?> get props => [loginData,status];
+  List<Object?> get props => [user,status];
 
-  LoginState copyWith({List<LoginModel>? loginData,loginStatus ? status}){
-    return  LoginState(loginData: loginData ?? this.loginData,status: status ?? this.status);
+  LoginState copyWith({LoginModel? user,LoginStatus? status,required String errorMessage}){
+    return  LoginState(user: user ?? this.user,status: status ?? this.status,errorMessage: errorMessage);
   }
 
 }

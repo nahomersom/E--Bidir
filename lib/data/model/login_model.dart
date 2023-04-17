@@ -1,8 +1,20 @@
 class LoginModel{
-  String phoneNumber;
-  String password;
+  bool success;
+  dynamic login;
+  String? token;
   LoginModel({
-    required this.phoneNumber,
-    required this.password
-});
+    required this.success,
+    this.login,
+    this.token,
+  });
+  factory LoginModel.fromJson(Map<String,dynamic> json) {
+
+    return LoginModel(
+      success: json['success'],
+      login: json['login'],
+      token: json['token'],
+
+    );
+
+  }
 }

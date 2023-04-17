@@ -1,6 +1,7 @@
+import 'package:e_bidir/data/model/login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class StorageService{
+class AuthService{
 
   final _storage = const FlutterSecureStorage(
       aOptions: AndroidOptions(
@@ -8,9 +9,11 @@ class StorageService{
       )
   );
 
-  Future<void> writeToken(Map token) async{
-    var key = token.keys.elementAt(0);
-    await _storage.write(key: key, value: token['token']);
+  Future<void> writeToken(LoginModel user) async{
+    // var key = token.keys.elementAt(0);
+    print('tokent');
+    print(user);
+    await _storage.write(key: 'token', value: user.token);
 
   }
 
@@ -23,7 +26,9 @@ class StorageService{
     bool containsKey = await _storage.containsKey(key: key);
     return containsKey;
   }
-
+  Future<void> removeToken() async{
+    await _storage.deleteAll();
+  }
 
 }
 

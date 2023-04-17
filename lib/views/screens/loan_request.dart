@@ -58,9 +58,9 @@ class _LoanRequestState extends State<LoanRequest> {
          SizedBox(height: SizeConfig.screenHeight! * 0.03,),
          TabTextField(textTheme: _textTheme,label: 'Interest',),
          SizedBox(height: SizeConfig.screenHeight! * 0.03,),
-         TabTextField(textTheme: _textTheme,label: 'Status',),
-         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
-         TabTextField(textTheme: _textTheme,label: 'Score',),
+         // TabTextField(textTheme: _textTheme,label: 'Status',),
+         // SizedBox(height: SizeConfig.screenHeight! * 0.03,),
+         // TabTextField(textTheme: _textTheme,label: 'Score',),
        ],
       [
         SizedBox(height: 15,),
@@ -90,7 +90,7 @@ class _LoanRequestState extends State<LoanRequest> {
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
         TabTextField(textTheme: _textTheme,label: 'Cylinder',),
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
-        TabTextField(textTheme: _textTheme,label: 'Transmission',),
+        TabTextField(textTheme: _textTheme,label: 'Car Score',),
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
         TabTextField(textTheme: _textTheme,label: 'Plate Number',),
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
@@ -100,7 +100,10 @@ class _LoanRequestState extends State<LoanRequest> {
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
         TabTextField(textTheme: _textTheme,label: 'Millage(Km)',),
         SizedBox(height: SizeConfig.screenHeight! * 0.03,),
-        TabTextField(textTheme: _textTheme,label: 'Millage(Km)',),
+        TabTextField(textTheme: _textTheme,label: 'Collateral_Coverage_Ratio',),
+        SizedBox(height: SizeConfig.screenHeight! * 0.03,),
+        TabTextField(textTheme: _textTheme,label: 'Car Image',),
+
       ],
     ];
     return  AnnotatedRegion<SystemUiOverlayStyle>(
