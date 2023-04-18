@@ -1,15 +1,19 @@
-
 import 'package:e_bidir/bloc/banks/banks_bloc.dart';
+import 'package:e_bidir/bloc/user_profile/user_profile_bloc.dart';
 import 'package:e_bidir/helpers/route_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../bloc/my_loan/my_loan_bloc.dart';
+import '../../data/api/api_client.dart';
+import '../../repositories/auth_repo.dart';
 import '../../utils/color_resource.dart';
 import '../widgets/dasboard_card.dart';
+
 class Dashboard extends StatelessWidget {
-   Dashboard({Key? key}) : super(key: key);
+  Dashboard({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -19,155 +23,190 @@ class Dashboard extends StatelessWidget {
     var screenHeight = size.height;
     var screenWidth = size.width;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.light,
-        ),
-      child: 
-      Scaffold(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
         drawerEnableOpenDragGesture: false,
         key: _key,
-        drawer: Drawer(
+        drawer: RepositoryProvider(
+    create: (context)=> AuthRepo(apiClient: ApiClient()),
+    child: BlocProvider(
+    create: (context)=> UserProfileBloc(userProfileRepo: context.read<AuthRepo>())..add(GetUserProfile()),
+    child: BlocConsumer<UserProfileBloc,UserProfileState>(
+    listener: (context, state) {
+    if (state.status.hasError) {
+    showSnackBar(context, state, _textTheme);
+    }
+    },
+    builder: (context, state) {
+
+      return Drawer(
           child: Container(
             height: double.infinity,
-                    decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-            stops: [0.0,0.5],
-
-            colors: [ColorResources.primaryColor,ColorResources.accentColor]
-            )
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
+                    stops: [
+                      0.0,
+                      0.5
+                    ],
+                    colors: [
+                      ColorResources.primaryColor,
+                      ColorResources.accentColor
+                    ])),
+            child: SafeArea(
+              child: ListView(
+                // Important: Remove any padding from the ListView.
+                padding: EdgeInsets.only(top: 10, left: 8),
+                children: [
+                  ListTile(
+                    minLeadingWidth: 40,
+                    minVerticalPadding: 15,
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(state.userInfo?.profile['url']??''),
                     ),
-
-
-
-          child: SafeArea(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.only(top:10,left: 8),
-              children: [
-               ListTile(
-                minLeadingWidth: 40,
-                 minVerticalPadding: 15,
-                 leading: CircleAvatar(
-                   radius: 30,
-            backgroundImage: AssetImage('assets/images/user.jpg'),
-
-          ),
-                 horizontalTitleGap: 25,
-
-                 title: Text('Jhon Doe',style: _textTheme.titleLarge?.copyWith(
-                   fontSize: 24
-                 ),),
-                 subtitle: Text('20.2 credits',style: _textTheme.labelMedium,
-                 ),
-               ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.group_add,color: Color(0xffAB4747)),
+                    horizontalTitleGap: 25,
+                    title: Text(
+                    state.userInfo?.name??'Unknown',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 14),
+                    ),
+                    subtitle: Text(
+                        (state.userInfo?.score.toString() ?? '0') + '  credits',
+                      style: _textTheme.labelMedium,
+                    ),
                   ),
-                  title:  Text('My Loans',style: _textTheme.titleLarge?.copyWith(
-                    fontSize: 18
-                  ),),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                    Navigator.pushNamed(context, RouteHelper.myLoans,
-                      arguments:'My Loans',
-                    );
-                  },
-                ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.directions_car,color: Color(0xff388AD6)),
+                  SizedBox(
+                    height: 10,
                   ),
-                  title:  Text('My Collaterals',style: _textTheme.titleLarge?.copyWith(
-                      fontSize: 18
-                  ),),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                    Navigator.pushNamed(context, RouteHelper.myCollaterals,  arguments:  'Collaterals');
-                  },
-                ),
-                // SizedBox(height: 10,),
-                // // ListTile(
-                // //   leading: CircleAvatar(
-                // //     backgroundColor: ColorResources.iconBackgroundColor,
-                // //     child: Icon(Icons.account_balance,color: Color(0xff3A58A5)),
-                // //   ),
-                // //   title:  Text('Available Banks',style: _textTheme.titleLarge?.copyWith(
-                // //       fontSize: 18
-                // //   ),),
-                // //   onTap: () {
-                // //     // Update the state of the app.
-                // //     // ...
-                // //     Navigator.pushNamed(context, RouteHelper.availableBanks,  arguments: 'Available Banks',);
-                // //   },
-                // // ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.delete,color: Color(0xff8833DD)),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorResources.iconBackgroundColor,
+                      child: Icon(Icons.group_add, color: Color(0xffAB4747)),
+                    ),
+                    title: Text(
+                      'My Loans',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 18),
+                    ),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                      Navigator.pushNamed(
+                        context,
+                        RouteHelper.myLoans,
+                        arguments: 'My Loans',
+                      );
+                    },
                   ),
-                  title:  Text('Deactive Account',style: _textTheme.titleLarge?.copyWith(
-                      fontSize: 18
-                  ),),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.help,color: Color(0xff86C853)),
+                  SizedBox(
+                    height: 10,
                   ),
-                  title:  Text('Help Center',style: _textTheme.titleLarge?.copyWith(
-                      fontSize: 18
-                  ),),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-
-                  },
-                ),
-                SizedBox(height: 10,),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: ColorResources.iconBackgroundColor,
-                    child: Icon(Icons.logout,color: Color(0xffDA2222)),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorResources.iconBackgroundColor,
+                      child:
+                      Icon(Icons.directions_car, color: Color(0xff388AD6)),
+                    ),
+                    title: Text(
+                      'My Collaterals',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 18),
+                    ),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                      Navigator.pushNamed(context, RouteHelper.myCollaterals,
+                          arguments: 'Collaterals');
+                    },
                   ),
-                  title:  Text('Logout',style: _textTheme.titleLarge?.copyWith(
-                      fontSize: 18
-                  ),),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, RouteHelper.login);
-                  },
-                ),
-              ],
+                  // SizedBox(height: 10,),
+                  // // ListTile(
+                  // //   leading: CircleAvatar(
+                  // //     backgroundColor: ColorResources.iconBackgroundColor,
+                  // //     child: Icon(Icons.account_balance,color: Color(0xff3A58A5)),
+                  // //   ),
+                  // //   title:  Text('Available Banks',style: _textTheme.titleLarge?.copyWith(
+                  // //       fontSize: 18
+                  // //   ),),
+                  // //   onTap: () {
+                  // //     // Update the state of the app.
+                  // //     // ...
+                  // //     Navigator.pushNamed(context, RouteHelper.availableBanks,  arguments: 'Available Banks',);
+                  // //   },
+                  // // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorResources.iconBackgroundColor,
+                      child: Icon(Icons.delete, color: Color(0xff8833DD)),
+                    ),
+                    title: Text(
+                      'Deactive Account',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 18),
+                    ),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorResources.iconBackgroundColor,
+                      child: Icon(Icons.help, color: Color(0xff86C853)),
+                    ),
+                    title: Text(
+                      'Help Center',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 18),
+                    ),
+                    onTap: () {
+                      // Update the state of the app.
+                      // ...
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorResources.iconBackgroundColor,
+                      child: Icon(Icons.logout, color: Color(0xffDA2222)),
+                    ),
+                    title: Text(
+                      'Logout',
+                      style: _textTheme.titleLarge?.copyWith(fontSize: 18),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(
+                          context, RouteHelper.login);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        ),
-        body: BlocConsumer<BankBloc,BankState>(
-          listener: (context,state){
-            if(state.status.hasError){
-             showSnackBar(context,state,_textTheme);
 
+      );
+
+    }
+
+    ),
+    ),
+        ),
+        body: BlocConsumer<BankBloc, BankState>(
+          listener: (context, state) {
+            if (state.status.hasError) {
+              showSnackBar(context, state, _textTheme);
             }
           },
-          builder: (context,state){
-          return  Stack(
-
-            children:[
+          builder: (context, state) {
+            return Stack(children: [
               Container(
                 child: Column(
                   children: [
@@ -177,266 +216,578 @@ class Dashboard extends StatelessWidget {
                           gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [ColorResources.accentColor,ColorResources.primaryColor]
-                          )
-
-                      ),
+                              colors: [
+                            ColorResources.accentColor,
+                            ColorResources.primaryColor
+                          ])),
                       child: SafeArea(
                         child: Padding(
-                          padding: EdgeInsets.only(left: screenWidth * 0.05,top: screenHeight * 0.02),
+                          padding: EdgeInsets.only(
+                              left: screenWidth * 0.05,
+                              top: screenHeight * 0.02),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               IconButton(
-                                  icon: Icon(Icons.menu,color: ColorResources.scaffoldColor,size: 40,),
-                                  onPressed: () => _key.currentState!.openDrawer(),
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: ColorResources.scaffoldColor,
+                                  size: 40,
+                                ),
+                                onPressed: () =>
+                                    _key.currentState!.openDrawer(),
                               ),
-
-                             SizedBox(width: screenWidth * 0.03,),
-                             Expanded(
-                               child: SizedBox(
-                                 width: screenWidth * 0.75,
-                                 child:  Image.asset('assets/images/logo.png'),
-                               ),
-                             )
+                              SizedBox(
+                                width: screenWidth * 0.03,
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  width: screenWidth * 0.75,
+                                  child: Image.asset('assets/images/logo.png'),
+                                ),
+                              )
                             ],
                           ),
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
-              BlocConsumer<MyLoanBloc,MyLoanState>(
-                listener: (context,state){
-                  if(state.status.hasError){
-                    showSnackBar(context,state,_textTheme);
-
+              BlocConsumer<MyLoanBloc, MyLoanState>(
+                listener: (context, state) {
+                  if (state.status.hasError) {
+                    showSnackBar(context, state, _textTheme);
                   }
                 },
                 builder: (BuildContext context, state) {
-                  return  Container(
-                      margin: EdgeInsets.only(top:screenHeight * 0.37),
-                      color:ColorResources.scaffoldColor,
+                  return Container(
+                      margin: EdgeInsets.only(top: screenHeight * 0.37),
+                      color: ColorResources.scaffoldColor,
                       height: screenHeight * 0.6,
                       width: screenWidth,
                       child: Padding(
-                        padding: EdgeInsets.only(top: screenHeight*0.07),
-                        child: ListView(
-
-                            children:[
-                              Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                                  child: Text('Loan Status',style: _textTheme.headlineMedium,)),
-                              SizedBox(height: 10,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                                child: Container(
-                                  height: screenHeight * 0.1,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.scaffoldColor,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.blurColor,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1), // Shadow position
+                        padding: EdgeInsets.only(top: screenHeight * 0.07),
+                        child: state.status.isLoading
+                            ? ListView
+                          (children: [
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.03),
+                              child: Text(
+                                'Loan Status',
+                                style: _textTheme.headlineMedium,
+                              )),
+                                Column(children: List.generate(4, (index) =>
+                                  Column(
+                                    children: [
+                                      Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 0.03,
                                       ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Text('Approved',style: _textTheme.titleSmall?.copyWith(
-                                                color: ColorResources.approvedColor,
-                                              ),),
-                                            ),
-                                            Expanded(
-                                              child:    Text('27 jan 2023',style: _textTheme.labelMedium?.copyWith(
-                                                  color: ColorResources.lightStatusTextColor
-                                              ),),
-                                            )
+                                      child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade300,
+                                          highlightColor: Colors.grey.shade100,
+                                          child:Container(
+                                            height: screenHeight * 0.1,
+                                            width:double.infinity,
+                                            color: Colors.white,
+                                          )
 
-                                          ],
+                                      ),
+                                    ),
+                                      SizedBox(height: 15,)
+                                  ]
+                                  ),
+
+                                ),
+                  )
+                              ])
+                            : ListView(children: [
+                                Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth * 0.03),
+                                    child: Text(
+                                      'Loan Status',
+                                      style: _textTheme.headlineMedium,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.03,
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: screenHeight * 0.1,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.scaffoldColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.blurColor,
+                                          blurRadius: 2,
+                                          offset:
+                                              Offset(0, 1), // Shadow position
                                         ),
-                                        Text('3000',style: _textTheme.titleSmall?.copyWith(
-                                            color: ColorResources.accentColor
-                                        ),)
                                       ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Approved',
+                                                style: _textTheme.titleSmall
+                                                    ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: ColorResources
+                                                      .secondaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                'Approved by all banks',
+                                                style: _textTheme.labelMedium
+                                                    ?.copyWith(
+                                                        color: ColorResources
+                                                            .lightStatusTextColor),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            state.myLoanStatus[1]['approved'].toString(),
+                                            style: _textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: ColorResources
+                                                        .secondaryColor),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 15,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: screenHeight * 0.1,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.scaffoldColor,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.blurColor,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1), // Shadow position
-                                      ),
-                                    ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.03,
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Text('Pending',style: _textTheme.titleSmall?.copyWith(
-                                                color: ColorResources.pendingColor,
-                                              ),),
-                                            ),
-                                            Expanded(
-                                              child:  Text('27 jan 2023',style: _textTheme.labelMedium?.copyWith(
-                                                  color: ColorResources.lightStatusTextColor
-                                              ),),
-                                            )
-
-                                          ],
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: screenHeight * 0.1,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.scaffoldColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.blurColor,
+                                          blurRadius: 2,
+                                          offset:
+                                              Offset(0, 1), // Shadow position
                                         ),
-                                        Text('3000',style: _textTheme.titleSmall?.copyWith(
-                                            color: ColorResources.accentColor
-                                        ),)
                                       ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Pending',
+                                                style: _textTheme.titleSmall
+                                                    ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: ColorResources
+                                                      .secondaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                'Waiting Approval',
+                                                style: _textTheme.labelMedium
+                                                    ?.copyWith(
+                                                        color: ColorResources
+                                                            .lightStatusTextColor),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            state.myLoanStatus[0]['pending'].toString(),
+                                            style: _textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: ColorResources
+                                                        .secondaryColor),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 15,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: screenHeight * 0.1,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.scaffoldColor,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.blurColor,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1), // Shadow position
-                                      ),
-                                    ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.03,
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Text('Rejected',style: _textTheme.titleSmall?.copyWith(
-                                                color: ColorResources.rejectedColor,
-                                              ),),
-                                            ),
-                                            Expanded(
-                                              child:   Text('27 jan 2023',style: _textTheme.labelMedium?.copyWith(
-                                                  color: ColorResources.lightStatusTextColor
-                                              ),),
-                                            )
-
-                                          ],
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: screenHeight * 0.1,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.scaffoldColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.blurColor,
+                                          blurRadius: 2,
+                                          offset:
+                                              Offset(0, 1), // Shadow position
                                         ),
-                                        Text('3000',style: _textTheme.titleSmall?.copyWith(
-                                            color: ColorResources.accentColor
-                                        ),)
                                       ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Declined',
+                                                style: _textTheme.titleSmall
+                                                    ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: ColorResources
+                                                      .secondaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                'Declined by banks',
+                                                style: _textTheme.labelMedium
+                                                    ?.copyWith(
+                                                        color: ColorResources
+                                                            .lightStatusTextColor),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            state.myLoanStatus[3]['declined'].toString(),
+                                            style: _textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: ColorResources
+                                                        .secondaryColor),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 15,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: screenHeight * 0.1,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.scaffoldColor,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.blurColor,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1), // Shadow position
-                                      ),
-                                    ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.03,
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Text('Declined',style: _textTheme.titleSmall?.copyWith(
-                                                color: ColorResources.rejectedColor,
-                                              ),),
-                                            ),
-                                            Expanded(
-                                              child:   Text('27 jan 2023',style: _textTheme.labelMedium?.copyWith(
-                                                  color: ColorResources.lightStatusTextColor
-                                              ),),
-                                            )
-
-                                          ],
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: screenHeight * 0.1,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.scaffoldColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.blurColor,
+                                          blurRadius: 2,
+                                          offset:
+                                              Offset(0, 1), // Shadow position
                                         ),
-                                        Text('3000',style: _textTheme.titleSmall?.copyWith(
-                                            color: ColorResources.accentColor
-                                        ),)
                                       ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Closed',
+                                                style: _textTheme.titleSmall
+                                                    ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: ColorResources
+                                                      .secondaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                'Fully Paid Loans',
+                                                style: _textTheme.labelMedium
+                                                    ?.copyWith(
+                                                        color: ColorResources
+                                                            .lightStatusTextColor),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            state.myLoanStatus[2]['closed'].toString(),
+                                            style: _textTheme.titleSmall
+                                                ?.copyWith(
+                                                    color: ColorResources
+                                                        .secondaryColor),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ]
-                        ),
-                      )
-                  );
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                // Padding(
+                                //     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                                //     child: Text('Loan Status',style: _textTheme.headlineMedium,)),
+                                // SizedBox(height: 10,),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                                //   child: Container(
+                                //     height: screenHeight * 0.1,
+                                //     decoration: BoxDecoration(
+                                //       color: ColorResources.scaffoldColor,
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           color: ColorResources.blurColor,
+                                //           blurRadius: 2,
+                                //           offset: Offset(0, 1), // Shadow position
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Padding(
+                                //       padding: EdgeInsets.symmetric(horizontal: 10),
+                                //       child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //         crossAxisAlignment: CrossAxisAlignment.center,
+                                //         children: [
+                                //           Column(
+                                //             mainAxisAlignment: MainAxisAlignment.center,
+                                //             children: [
+                                //               Expanded(
+                                //                 child: Text('Approved',style: _textTheme.titleSmall?.copyWith(
+                                //                   color: ColorResources.approvedColor,
+                                //                 ),),
+                                //               ),
+                                //               Expanded(
+                                //                 child:    Text('Approved by all banks',style: _textTheme.labelMedium?.copyWith(
+                                //                     color: ColorResources.lightStatusTextColor
+                                //                 ),),
+                                //               )
+                                //
+                                //             ],
+                                //           ),
+                                //           Text('3000',style: _textTheme.titleSmall?.copyWith(
+                                //               color: ColorResources.accentColor
+                                //           ),)
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                // SizedBox(height: 15,),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                                //   child: Container(
+                                //     width: double.infinity,
+                                //     height: screenHeight * 0.1,
+                                //     decoration: BoxDecoration(
+                                //       color: ColorResources.scaffoldColor,
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           color: ColorResources.blurColor,
+                                //           blurRadius: 2,
+                                //           offset: Offset(0, 1), // Shadow position
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Padding(
+                                //       padding: EdgeInsets.symmetric(horizontal: 10),
+                                //       child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //         children: [
+                                //           Column(
+                                //             mainAxisAlignment: MainAxisAlignment.center,
+                                //             children: [
+                                //               Expanded(
+                                //                 child: Text('Pending',style: _textTheme.titleSmall?.copyWith(
+                                //                   color: ColorResources.pendingColor,
+                                //                 ),),
+                                //               ),
+                                //               Expanded(
+                                //                 child:  Text('Waiting approval',style: _textTheme.labelMedium?.copyWith(
+                                //                     color: ColorResources.lightStatusTextColor
+                                //                 ),),
+                                //               )
+                                //
+                                //             ],
+                                //           ),
+                                //           Text('3000',style: _textTheme.titleSmall?.copyWith(
+                                //               color: ColorResources.accentColor
+                                //           ),)
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                // SizedBox(height: 15,),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                                //   child: Container(
+                                //     width: double.infinity,
+                                //     height: screenHeight * 0.1,
+                                //     decoration: BoxDecoration(
+                                //       color: ColorResources.scaffoldColor,
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           color: ColorResources.blurColor,
+                                //           blurRadius: 2,
+                                //           offset: Offset(0, 1), // Shadow position
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Padding(
+                                //       padding: EdgeInsets.symmetric(horizontal: 10),
+                                //       child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //         children: [
+                                //           Column(
+                                //             mainAxisAlignment: MainAxisAlignment.center,
+                                //             children: [
+                                //               Expanded(
+                                //                 child: Text('Declined',style: _textTheme.titleSmall?.copyWith(
+                                //                   color: ColorResources.rejectedColor,
+                                //                 ),),
+                                //               ),
+                                //               Expanded(
+                                //                 child:   Text('Decline by banks',style: _textTheme.labelMedium?.copyWith(
+                                //                     color: ColorResources.lightStatusTextColor
+                                //                 ),),
+                                //               )
+                                //
+                                //             ],
+                                //           ),
+                                //           Text('3000',style: _textTheme.titleSmall?.copyWith(
+                                //               color: ColorResources.accentColor
+                                //           ),)
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                // SizedBox(height: 15,),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                                //   child: Container(
+                                //     width: double.infinity,
+                                //     height: screenHeight * 0.1,
+                                //     decoration: BoxDecoration(
+                                //       color: ColorResources.scaffoldColor,
+                                //       boxShadow: [
+                                //         BoxShadow(
+                                //           color: ColorResources.blurColor,
+                                //           blurRadius: 2,
+                                //           offset: Offset(0, 1), // Shadow position
+                                //         ),
+                                //       ],
+                                //     ),
+                                //     child: Padding(
+                                //       padding: EdgeInsets.symmetric(horizontal: 10),
+                                //       child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //         children: [
+                                //           Column(
+                                //             mainAxisAlignment: MainAxisAlignment.center,
+                                //             children: [
+                                //               Expanded(
+                                //                 child: Text('Closed',style: _textTheme.titleSmall?.copyWith(
+                                //                   color: ColorResources.rejectedColor,
+                                //                 ),),
+                                //               ),
+                                //               Expanded(
+                                //                 child:   Text('Full paid loans',style: _textTheme.labelMedium?.copyWith(
+                                //                     color: ColorResources.lightStatusTextColor
+                                //                 ),),
+                                //               )
+                                //
+                                //             ],
+                                //           ),
+                                //           Text('3000',style: _textTheme.titleSmall?.copyWith(
+                                //               color: ColorResources.accentColor
+                                //           ),)
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                              ]),
+                      ));
                 },
-
               ),
-
-
-                      state.status.isLoading ? DashboardCard(screenHeight: screenHeight, screenWidth: screenWidth, textTheme: _textTheme) :
-                      state.status.isSuccess ?
-                      DashboardCard(screenHeight: screenHeight, screenWidth: screenWidth, textTheme: _textTheme,hasData: true,bankInfo: state.bankInfo,) :
-                      DashboardCard(screenHeight: screenHeight, screenWidth: screenWidth, textTheme: _textTheme,hasData: false)
-
-
-            ]
-
-          );},
+              state.status.isLoading
+                  ? DashboardCard(
+                      screenHeight: screenHeight,
+                      screenWidth: screenWidth,
+                      textTheme: _textTheme)
+                  : state.status.isSuccess
+                      ? DashboardCard(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          textTheme: _textTheme,
+                          hasData: true,
+                          bankInfo: state.bankInfo,
+                        )
+                      : DashboardCard(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          textTheme: _textTheme,
+                          hasData: false)
+            ]);
+          },
         ),
       ),
     );
   }
-  void showSnackBar(context,state,_textTheme){
-    ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+
+  void showSnackBar(context, state, _textTheme) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 10),
         backgroundColor: ColorResources.errorText,
-        content: Center(child: Text(state.errorMessage??'',style:_textTheme.titleSmall?.copyWith(
-            color: Colors.white
-        )))));
+        content: Center(
+            child: Text(state.errorMessage ?? '',
+                style: _textTheme.titleSmall?.copyWith(color: Colors.white)))));
   }
 }
-

@@ -4,6 +4,7 @@ class AppConstants{
   static const String  loginUrl = '/login';
   static const String getBanks = '/admin/banks';
   static const String myLoan = '/myloan';
+  static const String userProfile = '/user';
   static const String token =   "token";
 
 }

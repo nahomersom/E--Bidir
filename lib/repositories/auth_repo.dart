@@ -14,5 +14,9 @@ class AuthRepo{
      return await apiClient.postData(AppConstants.loginUrl, {"phoneNo": user.phoneNo, "password": user.password});
 
   }
+   Future<Response> getUserProfile()  async{
+     return await apiClient.getData(AppConstants.userProfile);
+
+   }
 
 }

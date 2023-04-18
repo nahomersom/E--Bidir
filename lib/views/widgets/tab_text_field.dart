@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import '../../utils/color_resource.dart';
 import '../../utils/size_config.dart';
 class TabTextField extends StatelessWidget {
-  const TabTextField({
+   TabTextField({
     super.key,
     required TextTheme textTheme,
-    required this.label
+    required this.label,
+    this.value
   }) : _textTheme = textTheme;
 
   final TextTheme _textTheme;
   final String label;
+  dynamic value;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,12 @@ class TabTextField extends StatelessWidget {
         ),
         SizedBox(height: SizeConfig.screenHeight! * 0.02,),
         TextField(
+          readOnly: true,
 
           decoration: InputDecoration(
             filled: true,
+            hintText: value.toString()
+                ?? '',
             fillColor: ColorResources.textFieldColor,
             border: OutlineInputBorder(
                 borderSide: BorderSide(

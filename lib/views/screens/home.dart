@@ -36,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<BankBloc>(create: (BuildContext context)=>BankBloc(bankRepo: context.read<BankRepo>())..add(GetBanks())),
-          BlocProvider<MyLoanBloc>(create: (BuildContext context)=>MyLoanBloc(myLoanRepo: context.read<BankRepo>())..add(GetMyLoans()))
+
+          BlocProvider<MyLoanBloc>(create: (BuildContext context)=>MyLoanBloc(myLoanRepo: context.read<BankRepo>())..add(GetMyLoans())),
         ],
         child: BlocBuilder<BankBloc,BankState>(
             builder:(context,state){

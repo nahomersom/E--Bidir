@@ -16,18 +16,22 @@ class MyLoanState extends Equatable{
   MyLoanState({
     this.status = MyLoanStatus.loading,
     List<MyLoanInfo>? myLoanInfo,
+    List<Map>? myLoanStatus,
     required this.errorMessage,
-  }):myLoanInfo = myLoanInfo ?? const [];
+  }):myLoanInfo = myLoanInfo ?? const [],myLoanStatus = myLoanStatus ?? const [];
 
   final MyLoanStatus status;
   final List<MyLoanInfo> myLoanInfo;
+  final List<Map> myLoanStatus;
   final String errorMessage;
 
   @override
   List<Object?> get props => [status,myLoanInfo];
 
-  MyLoanState copyWith({MyLoanStatus? status,List<MyLoanInfo>? myLoanInfo,errorMessage}){
-    return  MyLoanState(status: status ?? this.status,myLoanInfo: myLoanInfo ?? this.myLoanInfo,errorMessage: errorMessage);
+  MyLoanState copyWith({MyLoanStatus? status,List<MyLoanInfo>? myLoanInfo,errorMessage,List<Map>? myLoanStatus}){
+    return  MyLoanState(status: status ?? this.status,myLoanInfo: myLoanInfo ?? this.myLoanInfo,
+        myLoanStatus: myLoanStatus ?? this.myLoanStatus,
+        errorMessage: errorMessage);
   }
 
 }
