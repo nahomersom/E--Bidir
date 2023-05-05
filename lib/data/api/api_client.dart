@@ -11,7 +11,7 @@ import '../services/local_storage_service.dart';
 class ApiClient{
   String appBaseUrl = AppConstants.baseUrl ;
   final String noInternetMessage = 'Connection to API server failed due to internet connection';
-  final int timeoutInSeconds = 30;
+  final int timeoutInSeconds = 20;
 
   String? token;
   Map<String, String>? _mainHeaders;
@@ -29,6 +29,8 @@ class ApiClient{
 Future readToken() async{
    AuthService storageService = AuthService();
   token =   await storageService.readToken(AppConstants.token);
+  print('console');
+  print(token);
   _mainHeaders = {
     'Content-Type': 'application/json; charset=UTF-8',
     'Token': '$token',
@@ -68,11 +70,13 @@ Future readToken() async{
 
   }
 
-  Future<dynamic> postData(
+  Future<dynamic> postData(String uri, dynamic body,{Map<String, String>? headers}
 
-      String uri, dynamic body, {Map<String, String>? headers}) async {
-
-
+      ) async {
+    headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    await readToken();
         print('====> GetX Base URL: $appBaseUrl');
         print('====> GetX Call: $uri');
         print('====> GetX Body: $body');
@@ -80,52 +84,54 @@ Future readToken() async{
       Http.Response _response = await Http.post(
         Uri.parse(appBaseUrl+uri),
         body: jsonEncode(body),
-        headers: headers ?? _mainHeaders,
+        headers:  _mainHeaders ?? headers,
       ).timeout(Duration(seconds: timeoutInSeconds));
 
+    if (_response.body.isNotEmpty) {
+      var response = jsonDecode(_response.body);
+      if (_response.statusCode == 200 || _response.statusCode == 201) {
 
-          if (_response.body.isNotEmpty) {
-            var response = jsonDecode(_response.body);
-            if (_response.statusCode == 200 || _response.statusCode == 201) {
-            return Response(_response.body, _response.statusCode);
-          } else {
-              throw Exception('Error: ${response['message']}');
-          }
-        } else {
-          throw Exception('Something Went Wrong');
-        }
-
+        return Response(_response.body, _response.statusCode);
+      } else {
+        throw Exception('Error: ${response['message']}');
+      }
+    } else {
+      throw Exception('Something Went Wrong');
+    }
 
   }
 
 
   Future<Response> putData(
-      String uri,
-      dynamic body, {
-        required Map<String, dynamic> query,
-        required String contentType,
-        required Map<String, String> headers,
-        required Function(dynamic) decoder,
-        required Function(double) uploadProgress
-      }) async {
-    try {
-      print('====> GetX Call: $uri');
-      print('====> GetX Body: $body');
-      Http.Response _response = await Http.put(
-        Uri.parse(appBaseUrl+uri),
-        body: jsonEncode(body),
-        headers: headers ?? _mainHeaders,
-      ).timeout(Duration(seconds: timeoutInSeconds));
-      Response response = handleResponse(_response);
-      if(kDebugMode) {
-        print('====> API Response: [${response.statusCode}] $uri\n${response.body}');
+      String uri, dynamic body, {Map<String, String>? headers}) async {
+    headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    await readToken();
+    print('====> GetX Base URL: $appBaseUrl');
+    print('====> GetX Call: $uri');
+    print('====> GetX Body: $body');
+
+    Http.Response _response = await Http.put(
+      Uri.parse(appBaseUrl+uri),
+      body: jsonEncode(body),
+      headers: _mainHeaders ?? headers,
+    ).timeout(Duration(seconds: timeoutInSeconds));
+
+
+    if (_response.body.isNotEmpty) {
+      var response = jsonDecode(_response.body);
+      if (_response.statusCode == 200 || _response.statusCode == 201) {
+
+        return Response(_response.body, _response.statusCode);
+      } else {
+        throw Exception('Error: ${response['message']}');
       }
-
-      return response;
-
-    } catch (e) {
-      return Response(noInternetMessage,1,reasonPhrase: noInternetMessage);
+    } else {
+      throw Exception('Something Went Wrong');
     }
+
+
   }
 
   Response handleResponse(Http.Response response) {

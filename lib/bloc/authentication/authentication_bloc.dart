@@ -19,13 +19,19 @@ class AuthenticationCubit extends Cubit<AuthenticationState>{
     }
   }
   void onGetCurrentUser() async{
+
     try{
-      await storageService.readToken(AppConstants.token);
 
+      var token = await storageService.hasToken(AppConstants.token);
+      if(token){
+        emit(state.copyWith(status: AuthenticationStatus.authenticated));
+      }else{
+        emit(state.copyWith(status: AuthenticationStatus.unauthenticated));
+      }
 
-      emit(state.copyWith(status: AuthenticationStatus.authenticated));
 
     }catch(e){
+
       emit(state.copyWith(status: AuthenticationStatus.unauthenticated));
     }
   }

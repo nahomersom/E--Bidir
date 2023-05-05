@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 
-class Economic extends Equatable {
+class EconomicSecond extends Equatable {
   final int Number_of_Employees;
   final int year;
   final double Total_Monthly_Income;
@@ -14,7 +14,7 @@ class Economic extends Equatable {
   final double fully_repaid_loans;
   final double EBIT;
   final double FCBT;
-  const Economic(
+  const EconomicSecond(
       {required this.Vehicles,
       required this.Lands,
       required this.Companies,

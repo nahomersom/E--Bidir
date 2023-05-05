@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 
 class Loan extends Equatable {
-  final int loan_amount;
+  final double loan_amount;
   final String Reason_for_loan;
   final String Loan_Payment_Period;
   final String Job_Status;
@@ -11,7 +11,7 @@ class Loan extends Equatable {
   final String Type_Of_Loan;
   final String Types_of_Collateral;
   final int Monthly_payment;
-  final int interest;
+  final double interest;
 
   const Loan(
       {required this.Type_Of_Loan,
@@ -35,4 +35,17 @@ class Loan extends Equatable {
         Monthly_payment,
         interest
       ];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['loan_amount'] = this.loan_amount;
+    data['Reason_for_loan'] = this.Reason_for_loan;
+    data['Loan_Payment_Period'] = this.Loan_Payment_Period;
+    data['Job_Status'] = this.Job_Status;
+    data['Bank'] = this.Bank;
+    data['Type_Of_Loan'] = this.Type_Of_Loan;
+    data['Types_of_Collateral'] = this.Types_of_Collateral;
+    data['Monthly_payment'] = this.Monthly_payment;
+    data['interest'] = this.interest;
+    return data;
+  }
 }

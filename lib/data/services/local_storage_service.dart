@@ -12,7 +12,7 @@ class AuthService{
   Future<void> writeToken(LoginModel user) async{
     // var key = token.keys.elementAt(0);
     print('tokent');
-    print(user);
+    print(user.token);
     await _storage.write(key: 'token', value: user.token);
 
   }

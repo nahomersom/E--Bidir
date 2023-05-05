@@ -8,12 +8,12 @@ import 'package:http/http.dart';
 
 import '../../data/api/api.dart';
 import '../../data/model/user.dart';
-import '../../repositories/auth_repo.dart';
+import '../../repositories/user_repo.dart';
 part 'login_event.dart';
 part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent,LoginState>{
   // final ApiRepository apiRepository;
-  AuthRepo authRepo;
+  UserRepo authRepo;
   final AuthenticationCubit authenticationCubit;
   LoginBloc(this.authenticationCubit, {required this.authRepo}):super( LoginState(errorMessage: '')){
   on<LoginRequest>(_onLoginRequest);

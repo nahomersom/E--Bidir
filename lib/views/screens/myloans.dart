@@ -1,157 +1,169 @@
+import 'package:e_bidir/bloc/my_loan/my_loan_bloc.dart';
+import 'package:e_bidir/data/api/api_client.dart';
 import 'package:e_bidir/utils/color_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../bloc/banks/banks_bloc.dart';
+import '../../data/model/my_loan/my_loan_info.dart';
+import '../../repositories/bank_repo.dart';
+
 /// The home page of the application which hosts the datagrid.
-class MyLoansDataGrid extends StatefulWidget {
-  /// Creates the home page.
-  MyLoansDataGrid({Key? key}) : super(key: key);
 
-  @override
-  _MyLoansDataGridState createState() => _MyLoansDataGridState();
-}
+class MyLoansDataGrid extends StatelessWidget {
+  // List<Employee> employees = <Employee>[];
+   EmployeeDataSource employeeDataSource =
+      EmployeeDataSource(myLoanData: []);
+  // employees = getEmployeeData();
+  // employeeDataSource = EmployeeDataSource(employeeData: employees);
 
-class _MyLoansDataGridState extends State<MyLoansDataGrid> {
-  List<Employee> employees = <Employee>[];
-  late EmployeeDataSource employeeDataSource;
-
-  @override
-  void initState() {
-    super.initState();
-    employees = getEmployeeData();
-    employeeDataSource = EmployeeDataSource(employeeData: employees);
-  }
-
-  @override
   Widget build(BuildContext context) {
     TextTheme _textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'My Loans'.toString(),
-          style: _textTheme.titleLarge?.copyWith(
-              color: ColorResources.accentColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 24),
-        ),
-      ),
-      body: SfDataGrid(
-        source: employeeDataSource,
+    return BlocProvider<MyLoanBloc>(
+      create: (BuildContext context) =>
+          MyLoanBloc(myLoanRepo: BankRepo(apiClient: ApiClient()))..add(GetMyLoans()),
+      child: Scaffold(
+          appBar: AppBar(
+              actions: <Widget>[
+          Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {},
+            child: Icon(
+              Icons.delete,
+              size: 26.0,
+            ),
+          )
+      )],
+            elevation: 0,
+            iconTheme: IconThemeData(
+              color: Colors.black, //change your color here
+            ),
 
-        columns: <GridColumn>[
-          GridColumn(
-              columnName: 'bank',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Bank',
-                  ))),
-          GridColumn(
-              columnName: 'collateral',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text('Collateral'))),
-          GridColumn(
-              columnName: 'status',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Status',
-                    overflow: TextOverflow.ellipsis,
-                  ))),
-          GridColumn(
-              columnName: 'loanAmount',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text('Loan Amount(ETB)'))),
-          GridColumn(
-              columnName: 'period',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text('Period(Month)'))),
-          GridColumn(
-              columnName: 'monthlyPayment',
-              label: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text('Monthly Payment'))),
-          GridColumn(
-              columnName: 'score',
-              label: Container(
-                  padding: EdgeInsets.all(2.0),
-                  alignment: Alignment.center,
-                  child: Text('Score'))),
-          GridColumn(
-              columnName: 'rank',
-              label: Container(
-                  padding: EdgeInsets.all(2.0),
-                  alignment: Alignment.center,
-                  child: Text('Rank'))),
-        ],
-      ),
+            backgroundColor: Colors.transparent,
+            title: Text(
+              'My Loans'.toString(),
+              style: _textTheme.titleLarge?.copyWith(
+                  color: ColorResources.accentColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24),
+            ),
+          ),
+          body: BlocConsumer<MyLoanBloc, MyLoanState>(
+            listener: (BuildContext context,state) {
+              if(state.status.hasError){
+                showSnackBar(context, state, _textTheme);
+              }
+            },
+            builder: (BuildContext context, state) {
+              state.status.isSuccess ? employeeDataSource = EmployeeDataSource(myLoanData: state.myLoanInfo) : null;
+              return state.status.isLoading ? Center(child: CircularProgressIndicator()) :
+              SfDataGrid(
+                allowSorting: true,
+                allowMultiColumnSorting: true,
+                allowFiltering: true,
+                showCheckboxColumn: true,
+                frozenColumnsCount: 1,
+                
+                selectionMode: SelectionMode.multiple,
+                columnWidthMode: ColumnWidthMode.auto,
+                source: employeeDataSource,
+                  columns: <GridColumn>[
+                  GridColumn(
+                      columnName: 'Bank',
+                      label: Container(
+                          padding: EdgeInsets.all(8.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Bank',
+                          ))),
+                  GridColumn(
+                      columnName: 'Types_of_Collateral',
+                      label: Container(
+                          padding: EdgeInsets.all(8.0),
+                          alignment: Alignment.center,
+                          child: Text('Collateral'))),
+                  GridColumn(
+                      columnName: 'status',
+                      label: Container(
+                          padding: EdgeInsets.all(8.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Status',
+                            overflow: TextOverflow.ellipsis,
+                          ))),
+                  GridColumn(
+                      columnName: 'loanAmount',
+                      label: Container(
+                          padding: EdgeInsets.all(8.0),
+                          alignment: Alignment.center,
+                          child: Text('Loan Amount(ETB)'))),
+                  GridColumn(
+                      columnName: 'Loan_Payment_Period',
+                      label: Container(
+                          padding: EdgeInsets.all(8.0),
+                          alignment: Alignment.center,
+                          child: Text('Period(Month)'))),
+                  GridColumn(
+                      columnName: 'Monthly_payment',
+                      label: Container(
+                          padding: EdgeInsets.all(10.0),
+                          alignment: Alignment.center,
+                          child: Text('Monthly Payment'))),
+                  GridColumn(
+                      columnName: 'score',
+                      label: Container(
+                          padding: EdgeInsets.all(2.0),
+                          alignment: Alignment.center,
+                          child: Text('Score'))),
+                  GridColumn(
+                      columnName: 'rank',
+                      label: Container(
+                          padding: EdgeInsets.all(2.0),
+                          alignment: Alignment.center,
+                          child: Text('Rank'))),
+                ],
+              );
+            },
+          )),
     );
-  }
 
-  List<Employee> getEmployeeData() {
-    return [
-      Employee('Ahadu Bank', 'Car', 'Pending', '1,3423', '44', '38,21',
-          '183.5', 'Good'),
-    ];
   }
+   void showSnackBar(context, state, _textTheme) {
+     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+         duration: const Duration(seconds: 10),
+         backgroundColor: ColorResources.errorText,
+         content: Center(
+             child: Text(state.errorMessage ?? '',
+                 style: _textTheme.titleSmall?.copyWith(color: Colors.white)))));
+   }
 }
 
 /// Custom business object class which contains properties to hold the detailed
 /// information about the employee which will be rendered in datagrid.
-class Employee {
-  /// Creates the employee class with required details.
-  Employee(this.image, this.collateral, this.status, this.loanAmount,
-      this.period, this.monthlyPayment, this.score, this.rank);
-
-  /// Id of an employee.
-  final String image;
-
-  /// Name of an employee.
-  final String collateral;
-
-  /// Designation of an employee.
-  final String status;
-
-  /// Salary of an employee.
-  final String loanAmount;
-  final String period;
-  final String monthlyPayment;
-  final String score;
-  final String rank;
-}
 
 /// An object to set the employee collection data source to the datagrid. This
 /// is used to map the employee data to the datagrid widget.
 class EmployeeDataSource extends DataGridSource {
   /// Creates the employee data source class with required details.
-  EmployeeDataSource({required List<Employee> employeeData}) {
-    _employeeData = employeeData
+  EmployeeDataSource({required List<MyLoanInfo> myLoanData}) {
+    _employeeData = myLoanData
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'image', value: e.image),
+              DataGridCell<String>(columnName: 'Bank', value: e.Bank),
               DataGridCell<String>(
-                  columnName: 'collateral', value: e.collateral),
+                  columnName: 'Types_of_Collateral', value: e.Types_of_Collateral),
               DataGridCell<String>(columnName: 'status', value: e.status),
               DataGridCell<String>(
-                  columnName: 'loanAmount', value: e.loanAmount),
-              DataGridCell<String>(columnName: 'period', value: e.period),
+                  columnName: 'loan_amount', value: e.loan_amount.toString()),
               DataGridCell<String>(
-                  columnName: 'monthlyPayment', value: e.monthlyPayment),
+                  columnName: 'Loan_Payment_Period',
+                  value: e.Loan_Payment_Period),
               DataGridCell<String>(
-                  columnName: 'score', value: e.score),
+                  columnName: 'Monthly_payment',
+                  value: e.Monthly_payment.toString()),
+              DataGridCell<String>(
+                  columnName: 'score', value: e.score.toString()),
               DataGridCell<String>(columnName: 'rank', value: e.rank),
             ]))
         .toList();

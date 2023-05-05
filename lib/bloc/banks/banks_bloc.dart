@@ -11,37 +11,31 @@ import '../../data/model/bank/bank_info.dart';
 part 'banks_state.dart';
 part 'banks_event.dart';
 
-class BankBloc extends Bloc<BanksEvent,BankState> {
+class BankBloc extends Bloc<BanksEvent, BankState> {
   final BankRepo bankRepo;
 
-  BankBloc({required this.bankRepo})
-      :super(BankState(errorMessage: '')){
+  BankBloc({required this.bankRepo}) : super(BankState(errorMessage: '')) {
     on<GetBanks>(_mapGetRecommendedEventToState);
-
-
   }
 
-  void _mapGetRecommendedEventToState(event, Emitter<BankState> emit) async{
+  void _mapGetRecommendedEventToState(event, Emitter<BankState> emit) async {
     List<BankInfo> banks;
-    emit(state.copyWith(status: BankStatus.loading,errorMessage: ''));
-    try{
-
+    emit(state.copyWith(status: BankStatus.loading, errorMessage: ''));
+    try {
       Response response = await bankRepo.getBanks();
-      print('*******************');
+
       // (json.decode(response.body)['banks'] as List).map((e) => print(e)).toList();
-      banks=(json.decode(response.body)['banks'] as List).map((i) =>
-          BankInfo.fromJson(i)).toList();
+      banks = (json.decode(response.body)['banks'] as List)
+          .map((i) => BankInfo.fromJson(i))
+          .toList();
       banks = banks.where((i) => i.status == 'active').toList();
 
       emit(state.copyWith(
-          status: BankStatus.success,
-          bankInfo: banks,
-        errorMessage: ''
-      ));
+          status: BankStatus.success, bankInfo: banks, errorMessage: ''));
       // playerBloc?.emit(recommendMezmurs);
-    }catch(e){
-
-      emit(state.copyWith(status: BankStatus.error,errorMessage: e.toString()));
+    } catch (e) {
+      emit(
+          state.copyWith(status: BankStatus.error, errorMessage: e.toString()));
     }
   }
 }

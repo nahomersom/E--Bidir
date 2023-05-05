@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../utils/color_resource.dart';
 class SharedTextField extends StatelessWidget {
@@ -31,11 +32,11 @@ class SharedTextField extends StatelessWidget {
         children: [
           Text(label,style: _textTheme.labelLarge,),
           SizedBox(height: 10,),
-          TextField(
+          TextFormField(
             controller: textEditingController,
             keyboardType:  inputType  == 'phone' ? TextInputType.phone : TextInputType.text,
            obscureText: inputType  == 'phone' ? false : true ,
-
+           inputFormatters:inputType  == 'phone' ? [LengthLimitingTextInputFormatter(10)] : [],//or any number you want],
             decoration: InputDecoration(
               hintText: placeholder,
               prefixIcon: prefixIcon,
