@@ -11,33 +11,37 @@ import '../../data/model/user.dart';
 import '../../repositories/user_repo.dart';
 part 'login_event.dart';
 part 'login_state.dart';
-class LoginBloc extends Bloc<LoginEvent,LoginState>{
+
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   // final ApiRepository apiRepository;
   UserRepo authRepo;
   final AuthenticationCubit authenticationCubit;
-  LoginBloc(this.authenticationCubit, {required this.authRepo}):super( LoginState(errorMessage: '')){
-  on<LoginRequest>(_onLoginRequest);
+  LoginBloc(this.authenticationCubit, {required this.authRepo})
+      : super(LoginState(errorMessage: '')) {
+    on<LoginRequest>(_onLoginRequest);
 //on getCurrent user
-  on<LogoutRequest>(_onLogoutRequest);
-
+    on<LogoutRequest>(_onLogoutRequest);
   }
-  void _onLoginRequest(LoginRequest event, Emitter<LoginState> emit) async{
+  void _onLoginRequest(LoginRequest event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.initial, errorMessage: ''));
-    try{
+    try {
       emit(state.copyWith(status: LoginStatus.loading, errorMessage: ''));
       Response? response = await authRepo.login(event.user);
-      LoginModel loginResponse =  LoginModel.fromJson(jsonDecode(response.body));
-     authenticationCubit.onAuthenticateRequest(loginResponse);
-     emit(state.copyWith(status: LoginStatus.success,user: loginResponse, errorMessage: ''));
-    }catch(e){
-      emit(state.copyWith(status: LoginStatus.error,errorMessage: e.toString()));
+      LoginModel loginResponse = LoginModel.fromJson(jsonDecode(response.body));
+      authenticationCubit.onAuthenticateRequest(loginResponse);
+      emit(state.copyWith(
+          status: LoginStatus.success, user: loginResponse, errorMessage: ''));
+    } catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.error, errorMessage: e.toString()));
     }
   }
- void getCurrentUser(){
-   authenticationCubit.onGetCurrentUser();
- }
-  void _onLogoutRequest(
-      LogoutRequest event,
-      Emitter<LoginState> emit
-      ){}
+
+  void getCurrentUser() {
+    authenticationCubit.onGetCurrentUser();
+  }
+
+  void _onLogoutRequest(LogoutRequest event, Emitter<LoginState> emit) {
+    emit(state.copyWith(status: LoginStatus.initial, errorMessage: ""));
+  }
 }

@@ -43,13 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isFormSubmitted = true;
       });
-      if (_phoneNumberControl.text.isNotEmpty &&
-          _passwordControl.text.isNotEmpty) {
-        User user = User(
-            phoneNo: _phoneNumberControl.text, password: _passwordControl.text);
-        print('user');
-        print(user.runtimeType);
-        _loginBloc.add(LoginRequest(user));
+      if (this._formKey.currentState!.validate()) {
+        if (_phoneNumberControl.text.isNotEmpty &&
+            _passwordControl.text.isNotEmpty) {
+          User user = User(
+              phoneNo: _phoneNumberControl.text,
+              password: _passwordControl.text);
+          print('user');
+          print(user.runtimeType);
+          _loginBloc.add(LoginRequest(user));
+        }
       }
     }
 
@@ -78,22 +81,19 @@ class _LoginScreenState extends State<LoginScreen> {
             }
           }, builder: (context, state) {
             if (state.status.isSuccess) {
-              WidgetsBinding.instance.addPostFrameCallback((_) =>
-                  {
-
-              Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false,
-              )
-
+              WidgetsBinding.instance.addPostFrameCallback((_) => {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
+                    )
                   });
             }
             return Form(
               key: _formKey,
               // autovalidateMode: AutovalidateMode.onUserInteraction,
               child: ListView(
-                  physics: BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 children: [
                   Image(image: AssetImage('assets/images/logo.png')),
 
