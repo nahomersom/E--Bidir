@@ -99,6 +99,9 @@ flutter:
      - assets/images/intro_2.jpeg
      - assets/images/intro_3.jpeg
      - assets/images/intro_4.jpeg
+     - assets/images/collaterals.png
+     - assets/images/buildings.png
+
   #   - images/a_dot_ham.jpeg
   fonts:
     - family: Inter

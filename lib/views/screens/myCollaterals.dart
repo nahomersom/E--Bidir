@@ -117,9 +117,11 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                               columns: <GridColumn>[
                                 GridColumn(
                                     columnName: 'Image',
+                                    columnWidthMode: ColumnWidthMode.fill,
                                     label: Container(
-                                        padding: EdgeInsets.all(8.0),
-                                        alignment: Alignment.center,
+                                        width: 2,
+                                        padding: EdgeInsets.all(3),
+                                        alignment: Alignment.centerLeft,
                                         child: Text(
                                           'Image',
                                         ))),
@@ -209,9 +211,11 @@ class CollateralDataSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'Image',
-                  value: e.carImage == null || e.carImage.length <= 0
-                      ? null
-                      : e.carImage?.first?["url"]),
+                  value: currentIndex != 0
+                      ? "building"
+                      : e.carImage == null || e.carImage.length <= 0
+                          ? null
+                          : e.carImage?.first?["url"]),
               DataGridCell<String>(
                   columnName: currentIndex == 0
                       ? 'Type_of_Vehicle'
@@ -259,17 +263,21 @@ class CollateralDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((e) {
       return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(3),
         child: e.columnName == 'Image'
-            ? LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                return e.value == null
-                    ? Text("img")
-                    : Image.network(
-                        e.value.toString(),
-                        fit: BoxFit.scaleDown,
-                      );
-              })
+            ? e.value == null
+                ? Image.asset(
+                    "assets/images/collaterals.png",
+                    fit: BoxFit.scaleDown,
+                  ):e.value == "building"?
+                  Image.asset(
+                    "assets/images/buildings.png",
+                    fit: BoxFit.scaleDown,
+                  )
+                : Image.network(
+                    e.value.toString(),
+                    fit: BoxFit.scaleDown,
+                  )
             : Text(e.value.toString()),
       );
     }).toList());
