@@ -9,6 +9,7 @@ import 'package:e_bidir/views/screens/loan_request.dart';
 import 'package:e_bidir/views/screens/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../bloc/my_loan/my_loan_bloc.dart';
 import '../../bloc/user_profile/user_profile_bloc.dart';
@@ -86,14 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     label: 'Home'),
                 const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.shopping_bag,
+                    icon: FaIcon(
+                      FontAwesomeIcons.handHoldingDollar,
                       size: 30,
                     ),
-                    activeIcon: Icon(
-                      Icons.sell,
-                      size: 30,
-                    ),
+
                     label: 'Request Loan'),
                 const BottomNavigationBarItem(
                     icon: Icon(

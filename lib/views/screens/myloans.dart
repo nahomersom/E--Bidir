@@ -1,8 +1,11 @@
 import 'package:e_bidir/bloc/my_loan/my_loan_bloc.dart';
 import 'package:e_bidir/data/api/api_client.dart';
 import 'package:e_bidir/utils/color_resource.dart';
+import 'package:e_bidir/views/screens/detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../bloc/banks/banks_bloc.dart';
@@ -20,7 +23,13 @@ class MyLoansDataGrid extends StatelessWidget {
 
   Widget build(BuildContext context) {
     TextTheme _textTheme = Theme.of(context).textTheme;
-    return BlocProvider<MyLoanBloc>(
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: ColorResources.rejectedColor,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+     child: BlocProvider<MyLoanBloc>(
       create: (BuildContext context) =>
           MyLoanBloc(myLoanRepo: BankRepo(apiClient: ApiClient()))..add(GetMyLoans()),
       child: Scaffold(
@@ -63,13 +72,19 @@ class MyLoansDataGrid extends StatelessWidget {
                 allowSorting: true,
                 allowMultiColumnSorting: true,
                 allowFiltering: true,
-                showCheckboxColumn: true,
+                // showCheckboxColumn: true,
                 frozenColumnsCount: 1,
                 
-                selectionMode: SelectionMode.multiple,
+                selectionMode: SelectionMode.none,
                 columnWidthMode: ColumnWidthMode.auto,
                 source: employeeDataSource,
                   columns: <GridColumn>[
+                    GridColumn(
+                        columnName: 'Detail',
+                        label: Container(
+                            padding: EdgeInsets.all(1.0),
+                            alignment: Alignment.center,
+                            child: Text('Detail'))),
                   GridColumn(
                       columnName: 'Bank',
                       label: Container(
@@ -111,6 +126,24 @@ class MyLoansDataGrid extends StatelessWidget {
                           padding: EdgeInsets.all(10.0),
                           alignment: Alignment.center,
                           child: Text('Monthly Payment'))),
+                    GridColumn(
+                        columnName: 'Interest',
+                        label: Container(
+                            padding: EdgeInsets.all(10.0),
+                            alignment: Alignment.center,
+                            child: Text('Interest'))),
+                    GridColumn(
+                        columnName: 'Type_Of_Loan',
+                        label: Container(
+                            padding: EdgeInsets.all(10.0),
+                            alignment: Alignment.center,
+                            child: Text('Type of Loan'))),
+                    GridColumn(
+                        columnName: 'Job_Status',
+                        label: Container(
+                            padding: EdgeInsets.all(10.0),
+                            alignment: Alignment.center,
+                            child: Text('Job Status'))),
                   GridColumn(
                       columnName: 'score',
                       label: Container(
@@ -123,11 +156,12 @@ class MyLoansDataGrid extends StatelessWidget {
                           padding: EdgeInsets.all(2.0),
                           alignment: Alignment.center,
                           child: Text('Rank'))),
+
                 ],
               );
             },
           )),
-    );
+    ));
 
   }
    void showSnackBar(context, state, _textTheme) {
@@ -150,7 +184,9 @@ class EmployeeDataSource extends DataGridSource {
   EmployeeDataSource({required List<MyLoanInfo> myLoanData}) {
     _employeeData = myLoanData
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'Bank', value: e.Bank),
+      DataGridCell<Widget>(columnName: 'Detail', value: null),
+
+      DataGridCell<String>(columnName: 'Bank', value: e.Bank),
               DataGridCell<String>(
                   columnName: 'Types_of_Collateral', value: e.Types_of_Collateral),
               DataGridCell<String>(columnName: 'status', value: e.status),
@@ -158,10 +194,21 @@ class EmployeeDataSource extends DataGridSource {
                   columnName: 'loan_amount', value: e.loan_amount.toString()),
               DataGridCell<String>(
                   columnName: 'Loan_Payment_Period',
-                  value: e.Loan_Payment_Period),
+                  value: e.Loan_Payment_Period) ,
               DataGridCell<String>(
                   columnName: 'Monthly_payment',
                   value: e.Monthly_payment.toString()),
+      DataGridCell<String>(
+          columnName: 'Interest',
+          value: e.interest.toString()),
+      DataGridCell<String>(
+          columnName: 'Type_Of_Loan',
+
+          value: e.Type_Of_Loan),
+      DataGridCell<String>(
+          columnName: 'Job_Status',
+
+          value: e.Job_Status),
               DataGridCell<String>(
                   columnName: 'score', value: e.score.toString()),
               DataGridCell<String>(columnName: 'rank', value: e.rank),
@@ -178,10 +225,28 @@ class EmployeeDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((e) {
+
       return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(8.0),
-        child: Text(e.value.toString()),
+        padding: EdgeInsets.all(5.0),
+        child:
+        e.columnName == 'Detail'
+            ? LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return IconButton(onPressed: ()=>{
+
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  LoanDetail( loanDetail: row.getCells()))),
+
+
+              }, icon: FaIcon(
+                FontAwesomeIcons.circleInfo,
+                color: ColorResources.accentColor,
+              ));
+            })
+            :
+        Text(e.value.toString()),
       );
     }).toList());
   }
