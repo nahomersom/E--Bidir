@@ -35,7 +35,6 @@ class Dashboard extends StatelessWidget {
         statusBarIconBrightness: Brightness.light,
       ),
       child: BlocConsumer<UserProfileBloc, UserProfileState>(
-      child: BlocConsumer<UserProfileBloc, UserProfileState>(
           listener: (context, state) {
         if (state.userProfileStatus.hasUserProfileError) {
           showSnackBar(context, state, _textTheme);
@@ -190,7 +189,7 @@ class Dashboard extends StatelessWidget {
                         Future.delayed(Duration.zero, () {
                           AwesomeDialog(
                             context: context,
-                            dialogType: DialogType.question,
+                            dialogType: DialogType.noHeader,
                             bodyHeaderDistance: 2,
                             btnOkColor: ColorResources.accentColor,
                             btnCancelColor: ColorResources.ahaduBankColor,
@@ -1161,53 +1160,48 @@ class Dashboard extends StatelessWidget {
                                     showSnackBar(context, state, _textTheme);
                                   }
                                 }, builder: (context, state) {
-                                  return state.status.isLoading
-                                      ? Center(
-                                          child: CircularProgressIndicator(
-                                          color: ColorResources.accentColor,
-                                        ))
-                                      : Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Total pending Loans             ${state.myLoanStatus[0]['pending'].toString()} ',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff66676c)),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                'Total Declined Loans :           ${state.myLoanStatus[3]['declined'].toString()}',
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xff66676c))),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                'Total Closed Loans :               ${state.myLoanStatus[2]['closed'].toString()}',
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xff66676c))),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                'Total Approved Loans :         ${state.myLoanStatus[1]['approved'].toString()}',
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xff66676c))),
-                                          ],
-                                        );
+                                  return Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Total pending Loans             ${state.myLoanStatus[0]['pending'].toString()} ',
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xff66676c)),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                          'Total Declined Loans :           ${state.myLoanStatus[3]['declined'].toString()}',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xff66676c))),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                          'Total Closed Loans :               ${state.myLoanStatus[2]['closed'].toString()}',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xff66676c))),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                          'Total Approved Loans :         ${state.myLoanStatus[1]['approved'].toString()}',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xff66676c))),
+                                    ],
+                                  );
                                 }),
                               ),
                             ],

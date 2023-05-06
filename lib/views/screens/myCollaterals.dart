@@ -87,11 +87,9 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                                   setState(() {
                                     currentIndex = 0;
                                   });
-
                                 },
-                                child: Text('Cars',
-
-
+                                child: Text(
+                                  'Cars',
                                 ),
                               ),
                               TextButton(
@@ -117,14 +115,14 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                               columnWidthMode: ColumnWidthMode.auto,
                               source: employeeDataSource,
                               columns: <GridColumn>[
-                                // GridColumn(
-                                //     columnName: 'Image',
-                                //     label: Container(
-                                //         padding: EdgeInsets.all(8.0),
-                                //         alignment: Alignment.center,
-                                //         child: Text(
-                                //           'Image',
-                                //         ))),
+                                GridColumn(
+                                    columnName: 'Image',
+                                    label: Container(
+                                        padding: EdgeInsets.all(8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Image',
+                                        ))),
                                 GridColumn(
                                     columnName: currentIndex == 0
                                         ? 'Type_of_Vehicle'
@@ -209,7 +207,11 @@ class CollateralDataSource extends DataGridSource {
   CollateralDataSource({required List<dynamic> myCarData}) {
     _employeeData = myCarData
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              // DataGridCell<String>(columnName: 'Image', value:  e.carImage.isNotEmpty ? 'yes image':'no image'),
+              DataGridCell<String>(
+                  columnName: 'Image',
+                  value: e.carImage == null || e.carImage.length <= 0
+                      ? null
+                      : e.carImage?.first?["url"]),
               DataGridCell<String>(
                   columnName: currentIndex == 0
                       ? 'Type_of_Vehicle'
@@ -258,7 +260,17 @@ class CollateralDataSource extends DataGridSource {
       return Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(8.0),
-        child: Text(e.value.toString()),
+        child: e.columnName == 'Image'
+            ? LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                return e.value == null
+                    ? Text("img")
+                    : Image.network(
+                        e.value.toString(),
+                        fit: BoxFit.scaleDown,
+                      );
+              })
+            : Text(e.value.toString()),
       );
     }).toList());
   }
