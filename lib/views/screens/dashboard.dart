@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../bloc/my_loan/my_loan_bloc.dart';
@@ -33,6 +34,7 @@ class Dashboard extends StatelessWidget {
         statusBarColor: ColorResources.accentColor,
         statusBarIconBrightness: Brightness.light,
       ),
+      child: BlocConsumer<UserProfileBloc, UserProfileState>(
       child: BlocConsumer<UserProfileBloc, UserProfileState>(
           listener: (context, state) {
         if (state.userProfileStatus.hasUserProfileError) {
@@ -215,6 +217,405 @@ class Dashboard extends StatelessWidget {
             ),
           ),
 
+          // body: BlocConsumer<BankBloc, BankState>(
+          //   listener: (context, state) {
+          //     if (state.status.hasError) {
+          //       showSnackBar(context, state, _textTheme);
+          //     }
+          //   },
+          //   builder: (context, state) {
+          //     return Stack(children: [
+          //       Container(
+          //         child: Column(
+          //           children: [
+          //             Container(
+          //               height: size.height * 0.91,
+          //               decoration: BoxDecoration(
+          //                   gradient: LinearGradient(
+          //                       begin: Alignment.topCenter,
+          //                       end: Alignment.bottomCenter,
+          //                       colors: [
+          //                     ColorResources.accentColor,
+          //                     ColorResources.primaryColor
+          //                   ])),
+          //               child: SafeArea(
+          //                 child: Padding(
+          //                   padding: EdgeInsets.only(
+          //                       left: screenWidth * 0.05,
+          //                       top: screenHeight * 0.02),
+          //                   child: Row(
+          //                     crossAxisAlignment: CrossAxisAlignment.start,
+          //                     children: [
+          //                       IconButton(
+          //                         icon: Icon(
+          //                           Icons.menu,
+          //                           color: ColorResources.scaffoldColor,
+          //                           size: 40,
+          //                         ),
+          //                         onPressed: () =>
+          //                             _key.currentState!.openDrawer(),
+          //                       ),
+          //                       SizedBox(
+          //                         width: screenWidth * 0.03,
+          //                       ),
+          //                       // Expanded(
+          //                       //   child: SizedBox(
+          //                       //     width: screenWidth * 0.75,
+          //                       //     child: Image.asset('assets/images/logo.png'),
+          //                       //   ),
+          //                       // )
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       BlocConsumer<MyLoanBloc, MyLoanState>(
+          //         listener: (context, state) {
+          //           if (state.status.hasError) {
+          //             showSnackBar(context, state, _textTheme);
+          //           }
+          //         },
+          //         builder: (BuildContext context, state) {
+          //           return Container(
+          //               margin: EdgeInsets.only(top: screenHeight * 0.28),
+          //               color: ColorResources.scaffoldColor,
+          //               height: screenHeight * 0.8,
+          //               width: screenWidth,
+          //               child: Padding(
+          //                 padding: EdgeInsets.only(top: screenHeight * 0.05),
+          //                 child: state.status.isLoading
+          //                     ? ListView(children: [
+          //                         Padding(
+          //                             padding: EdgeInsets.symmetric(
+          //                                 horizontal: screenWidth * 0.03),
+          //                             child: Text(
+          //                               'Loan Status',
+          //                               style: _textTheme.headlineMedium,
+          //                             )),
+          //                         Column(
+          //                           children: List.generate(
+          //                             4,
+          //                             (index) => Column(children: [
+          //                               Padding(
+          //                                 padding: EdgeInsets.symmetric(
+          //                                   horizontal: screenWidth * 0.03,
+          //                                 ),
+          //                                 child: Shimmer.fromColors(
+          //                                     baseColor: Colors.grey.shade300,
+          //                                     highlightColor:
+          //                                         Colors.grey.shade100,
+          //                                     child: Container(
+          //                                       height: screenHeight * 0.1,
+          //                                       width: double.infinity,
+          //                                       color: Colors.white,
+          //                                     )),
+          //                               ),
+          //                               SizedBox(
+          //                                 height: 15,
+          //                               )
+          //                             ]),
+          //                           ),
+          //                         )
+          //                       ])
+          //                     : ListView(children: [
+          //                         Padding(
+          //                             padding: EdgeInsets.symmetric(
+          //                                 horizontal: screenWidth * 0.03),
+          //                             child: Text(
+          //                               'Loan Status',
+          //                               style: _textTheme.headlineMedium,
+          //                             )),
+          //                         SizedBox(
+          //                           height: 10,
+          //                         ),
+          //                         Padding(
+          //                           padding: EdgeInsets.symmetric(
+          //                             horizontal: screenWidth * 0.03,
+          //                           ),
+          //                           child: Container(
+          //                             width: double.infinity,
+          //                             height: screenHeight * 0.1,
+          //                             decoration: BoxDecoration(
+          //                               color: ColorResources.scaffoldColor,
+          //                               boxShadow: [
+          //                                 BoxShadow(
+          //                                   color: ColorResources.blurColor,
+          //                                   blurRadius: 2,
+          //                                   offset:
+          //                                       Offset(0, 1), // Shadow position
+          //                                 ),
+          //                               ],
+          //                             ),
+          //                             child: Padding(
+          //                               padding: EdgeInsets.all(10),
+          //                               child: Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.spaceBetween,
+          //                                 children: [
+          //                                   Column(
+          //                                     mainAxisAlignment:
+          //                                         MainAxisAlignment.center,
+          //                                     crossAxisAlignment:
+          //                                         CrossAxisAlignment.start,
+          //                                     children: [
+          //                                       Text(
+          //                                         'Approved',
+          //                                         style: _textTheme.titleSmall
+          //                                             ?.copyWith(
+          //                                           fontWeight: FontWeight.w600,
+          //                                           color: ColorResources
+          //                                               .secondaryColor,
+          //                                         ),
+          //                                       ),
+          //                                       SizedBox(height: 4),
+          //                                       Text(
+          //                                         'Approved by all banks',
+          //                                         style: _textTheme.labelMedium
+          //                                             ?.copyWith(
+          //                                                 color: ColorResources
+          //                                                     .lightStatusTextColor),
+          //                                       ),
+          //                                     ],
+          //                                   ),
+          //                                   Text(
+          //                                     state.myLoanStatus[1]['approved']
+          //                                         .toString(),
+          //                                     style: _textTheme.titleSmall
+          //                                         ?.copyWith(
+          //                                             color: ColorResources
+          //                                                 .secondaryColor),
+          //                                   )
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         SizedBox(
+          //                           height: 10,
+          //                         ),
+          //                         Padding(
+          //                           padding: EdgeInsets.symmetric(
+          //                             horizontal: screenWidth * 0.03,
+          //                           ),
+          //                           child: Container(
+          //                             width: double.infinity,
+          //                             height: screenHeight * 0.1,
+          //                             decoration: BoxDecoration(
+          //                               color: ColorResources.scaffoldColor,
+          //                               boxShadow: [
+          //                                 BoxShadow(
+          //                                   color: ColorResources.blurColor,
+          //                                   blurRadius: 2,
+          //                                   offset:
+          //                                       Offset(0, 1), // Shadow position
+          //                                 ),
+          //                               ],
+          //                             ),
+          //                             child: Padding(
+          //                               padding: EdgeInsets.all(10),
+          //                               child: Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.spaceBetween,
+          //                                 children: [
+          //                                   Column(
+          //                                     mainAxisAlignment:
+          //                                         MainAxisAlignment.center,
+          //                                     crossAxisAlignment:
+          //                                         CrossAxisAlignment.start,
+          //                                     children: [
+          //                                       Text(
+          //                                         'Pending',
+          //                                         style: _textTheme.titleSmall
+          //                                             ?.copyWith(
+          //                                           fontWeight: FontWeight.w600,
+          //                                           color: ColorResources
+          //                                               .secondaryColor,
+          //                                         ),
+          //                                       ),
+          //                                       SizedBox(height: 4),
+          //                                       Text(
+          //                                         'Waiting Approval',
+          //                                         style: _textTheme.labelMedium
+          //                                             ?.copyWith(
+          //                                                 color: ColorResources
+          //                                                     .lightStatusTextColor),
+          //                                       ),
+          //                                     ],
+          //                                   ),
+          //                                   Text(
+          //                                     state.myLoanStatus[0]['pending']
+          //                                         .toString(),
+          //                                     style: _textTheme.titleSmall
+          //                                         ?.copyWith(
+          //                                             color: ColorResources
+          //                                                 .secondaryColor),
+          //                                   )
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         SizedBox(
+          //                           height: 10,
+          //                         ),
+          //                         Padding(
+          //                           padding: EdgeInsets.symmetric(
+          //                             horizontal: screenWidth * 0.03,
+          //                           ),
+          //                           child: Container(
+          //                             width: double.infinity,
+          //                             height: screenHeight * 0.1,
+          //                             decoration: BoxDecoration(
+          //                               color: ColorResources.scaffoldColor,
+          //                               boxShadow: [
+          //                                 BoxShadow(
+          //                                   color: ColorResources.blurColor,
+          //                                   blurRadius: 2,
+          //                                   offset:
+          //                                       Offset(0, 1), // Shadow position
+          //                                 ),
+          //                               ],
+          //                             ),
+          //                             child: Padding(
+          //                               padding: EdgeInsets.all(10),
+          //                               child: Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.spaceBetween,
+          //                                 children: [
+          //                                   Column(
+          //                                     mainAxisAlignment:
+          //                                         MainAxisAlignment.center,
+          //                                     crossAxisAlignment:
+          //                                         CrossAxisAlignment.start,
+          //                                     children: [
+          //                                       Text(
+          //                                         'Declined',
+          //                                         style: _textTheme.titleSmall
+          //                                             ?.copyWith(
+          //                                           fontWeight: FontWeight.w600,
+          //                                           color: ColorResources
+          //                                               .secondaryColor,
+          //                                         ),
+          //                                       ),
+          //                                       SizedBox(height: 4),
+          //                                       Text(
+          //                                         'Declined by banks',
+          //                                         style: _textTheme.labelMedium
+          //                                             ?.copyWith(
+          //                                                 color: ColorResources
+          //                                                     .lightStatusTextColor),
+          //                                       ),
+          //                                     ],
+          //                                   ),
+          //                                   Text(
+          //                                     state.myLoanStatus[3]['declined']
+          //                                         .toString(),
+          //                                     style: _textTheme.titleSmall
+          //                                         ?.copyWith(
+          //                                             color: ColorResources
+          //                                                 .secondaryColor),
+          //                                   )
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         SizedBox(
+          //                           height: 10,
+          //                         ),
+          //                         Padding(
+          //                           padding: EdgeInsets.symmetric(
+          //                             horizontal: screenWidth * 0.03,
+          //                           ),
+          //                           child: Container(
+          //                             width: double.infinity,
+          //                             height: screenHeight * 0.1,
+          //                             decoration: BoxDecoration(
+          //                               color: ColorResources.scaffoldColor,
+          //                               boxShadow: [
+          //                                 BoxShadow(
+          //                                   color: ColorResources.blurColor,
+          //                                   blurRadius: 2,
+          //                                   offset:
+          //                                       Offset(0, 1), // Shadow position
+          //                                 ),
+          //                               ],
+          //                             ),
+          //                             child: Padding(
+          //                               padding: EdgeInsets.all(10),
+          //                               child: Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment.spaceBetween,
+          //                                 children: [
+          //                                   Column(
+          //                                     mainAxisAlignment:
+          //                                         MainAxisAlignment.center,
+          //                                     crossAxisAlignment:
+          //                                         CrossAxisAlignment.start,
+          //                                     children: [
+          //                                       Text(
+          //                                         'Closed',
+          //                                         style: _textTheme.titleSmall
+          //                                             ?.copyWith(
+          //                                           fontWeight: FontWeight.w600,
+          //                                           color: ColorResources
+          //                                               .secondaryColor,
+          //                                         ),
+          //                                       ),
+          //                                       SizedBox(height: 4),
+          //                                       Text(
+          //                                         'Fully Paid Loans',
+          //                                         style: _textTheme.labelMedium
+          //                                             ?.copyWith(
+          //                                                 color: ColorResources
+          //                                                     .lightStatusTextColor),
+          //                                       ),
+          //                                     ],
+          //                                   ),
+          //                                   Text(
+          //                                     state.myLoanStatus[2]['closed']
+          //                                         .toString(),
+          //                                     style: _textTheme.titleSmall
+          //                                         ?.copyWith(
+          //                                             color: ColorResources
+          //                                                 .secondaryColor),
+          //                                   )
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         SizedBox(
+          //                           height: 5,
+          //                         ),
+          //                       ]),
+          //               ));
+          //         },
+          //       ),
+          //       state.status.isLoading
+          //           ? DashboardCard(
+          //               screenHeight: screenHeight,
+          //               screenWidth: screenWidth,
+          //               textTheme: _textTheme)
+          //           : state.status.isSuccess
+          //               ? DashboardCard(
+          //                   screenHeight: screenHeight,
+          //                   screenWidth: screenWidth,
+          //                   textTheme: _textTheme,
+          //                   hasData: true,
+          //                   bankInfo: state.bankInfo,
+          //                 )
+          //               : DashboardCard(
+          //                   screenHeight: screenHeight,
+          //                   screenWidth: screenWidth,
+          //                   textTheme: _textTheme,
+          //                   hasData: false)
+          //     ]);
+          //   },
+          // ),
           // body: BlocConsumer<BankBloc, BankState>(
           //   listener: (context, state) {
           //     if (state.status.hasError) {

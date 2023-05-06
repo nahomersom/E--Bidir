@@ -70,7 +70,7 @@ class _UserState extends State<User> {
             padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.screenWidth! * 0.08,
                 vertical: SizeConfig.screenHeight! * 0.03),
-            child: ListView(
+            child: Column(
               children: [
                 Align(
                     alignment: Alignment.bottomLeft,
@@ -86,6 +86,7 @@ class _UserState extends State<User> {
                     )),
                 Text(
                   'User Profile',
+                  textAlign: TextAlign.center,
                   style: _textTheme.headlineSmall?.copyWith(
                       color: ColorResources.accentColor,
                       fontSize: 25,
@@ -156,47 +157,54 @@ class _UserState extends State<User> {
                     },
                   ),
                 ),
-
                 currentIndex == 0
                     ? Center(
-                        child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            NetworkImage(state.userInfo?.profile['url'] ?? ''),
-                      ))
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage:
+                      NetworkImage(state.userInfo?.profile['url'] ?? ''),
+                    ))
                     : SizedBox(),
-                Column(
-                    children: getTabItems(_textTheme, state.userInfo,
-                        state.personalInfo, state.economicInfo)[currentIndex]),
-                SizedBox(
-                  height: SizeConfig.screenHeight! * 0.03,
-                ),
-                currentIndex == 2
-                    ? SizedBox()
-                    // ? SharedButton(
-                    //     textTheme: _textTheme,
-                    //     buttonText: 'Submit',
-                    //     buttonColor: ColorResources.accentColor,
-                    //     isSending: isSending,
-                    //     onPressed: () {
-                    //       setState(() {
-                    //         isSending = true;
-                    //       });
-                    //       Future.delayed(Duration(seconds: 3), () {
-                    //         Navigator.pushNamed(
-                    //             context, RouteHelper.home);
-                    //       });
-                    //     },
-                    //   )
-                    : TabButton(
-                  tabButtonText: 'Next',
-                        onPressed: () => {
-                          setState(() => {currentIndex++})
-                        },
-                      ),
-                SizedBox(
-                  height: SizeConfig.screenHeight! * 0.01,
-                ),
+               Expanded(
+                 child: ListView(
+                   children: [
+
+                     Column(
+                         children: getTabItems(_textTheme, state.userInfo,
+                             state.personalInfo, state.economicInfo)[currentIndex]),
+                     SizedBox(
+                       height: SizeConfig.screenHeight! * 0.03,
+                     ),
+                     currentIndex == 2
+                         ? SizedBox()
+                     // ? SharedButton(
+                     //     textTheme: _textTheme,
+                     //     buttonText: 'Submit',
+                     //     buttonColor: ColorResources.accentColor,
+                     //     isSending: isSending,
+                     //     onPressed: () {
+                     //       setState(() {
+                     //         isSending = true;
+                     //       });
+                     //       Future.delayed(Duration(seconds: 3), () {
+                     //         Navigator.pushNamed(
+                     //             context, RouteHelper.home);
+                     //       });
+                     //     },
+                     //   )
+                         : TabButton(
+                       tabButtonText: 'Next',
+                       onPressed: () => {
+                         setState(() => {currentIndex++})
+                       },
+                     ),
+                     SizedBox(
+                       height: SizeConfig.screenHeight! * 0.01,
+                     ),
+                   ],
+                 ),
+               )
+
               ],
             ),
           ),
