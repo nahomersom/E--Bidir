@@ -117,14 +117,16 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                               columnWidthMode: ColumnWidthMode.auto,
                               source: employeeDataSource,
                               columns: <GridColumn>[
-                                // GridColumn(
-                                //     columnName: 'Image',
-                                //     label: Container(
-                                //         padding: EdgeInsets.all(8.0),
-                                //         alignment: Alignment.center,
-                                //         child: Text(
-                                //           'Image',
-                                //         ))),
+                                GridColumn(
+                                    columnName: 'Image',
+                                    columnWidthMode: ColumnWidthMode.fill,
+                                    label: Container(
+                                        width: 2,
+                                        padding: EdgeInsets.all(3),
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Image',
+                                        ))),
                                 GridColumn(
                                     columnName: 'Detail',
                                     label: Container(
@@ -268,6 +270,13 @@ class CollateralDataSource extends DataGridSource {
               // DataGridCell<String>(columnName: 'Image', value:  e.carImage.isNotEmpty ? 'yes image':'no image'),
               DataGridCell<Widget>(columnName: 'Detail', value: null),
               DataGridCell<String>(
+                  columnName: 'Image',
+                  value: currentIndex != 0
+                      ? "building"
+                      : e.carImage == null || e.carImage.length <= 0
+                          ? null
+                          : e.carImage?.first?["url"]),
+              DataGridCell<String>(
                   columnName: currentIndex == 0
                       ? 'Type_of_Vehicle'
                       : 'Type_of_Building',
@@ -364,6 +373,21 @@ class CollateralDataSource extends DataGridSource {
                       color: ColorResources.accentColor,
                     ));
               })
+        padding: EdgeInsets.all(3),
+        child: e.columnName == 'Image'
+            ? e.value == null
+                ? Image.asset(
+                    "assets/images/collaterals.png",
+                    fit: BoxFit.scaleDown,
+                  ):e.value == "building"?
+                  Image.asset(
+                    "assets/images/buildings.png",
+                    fit: BoxFit.scaleDown,
+                  )
+                : Image.network(
+                    e.value.toString(),
+                    fit: BoxFit.scaleDown,
+                  )
             : Text(e.value.toString()),
       );
     }).toList());
