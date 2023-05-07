@@ -1,22 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:e_bidir/bloc/banks/banks_bloc.dart';
-import 'package:e_bidir/bloc/collateral/collaterals_bloc.dart';
 import 'package:e_bidir/bloc/user_profile/user_profile_bloc.dart';
 import 'package:e_bidir/data/services/local_storage_service.dart';
 import 'package:e_bidir/helpers/route_helper.dart';
-import 'package:e_bidir/utils/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
-
 import '../../bloc/my_loan/my_loan_bloc.dart';
-import '../../data/api/api_client.dart';
-import '../../repositories/user_repo.dart';
 import '../../utils/color_resource.dart';
-import '../widgets/dasboard_card.dart';
 
 class Dashboard extends StatelessWidget {
   Dashboard({Key? key}) : super(key: key);
@@ -77,7 +68,7 @@ class Dashboard extends StatelessWidget {
                         style: _textTheme.titleLarge?.copyWith(fontSize: 14),
                       ),
                       subtitle: Text(
-                        (state.userInfo?.score.toString() ?? '0') + '  credits',
+                        (state.userInfo?.score.toString() ?? '0') + '  score',
                         style: _textTheme.labelMedium,
                       ),
                     ),
@@ -211,861 +202,473 @@ class Dashboard extends StatelessWidget {
               ),
             ),
           ),
-
-          // body: BlocConsumer<BankBloc, BankState>(
-          //   listener: (context, state) {
-          //     if (state.status.hasError) {
-          //       showSnackBar(context, state, _textTheme);
-          //     }
-          //   },
-          //   builder: (context, state) {
-          //     return Stack(children: [
-          //       Container(
-          //         child: Column(
-          //           children: [
-          //             Container(
-          //               height: size.height * 0.91,
-          //               decoration: BoxDecoration(
-          //                   gradient: LinearGradient(
-          //                       begin: Alignment.topCenter,
-          //                       end: Alignment.bottomCenter,
-          //                       colors: [
-          //                     ColorResources.accentColor,
-          //                     ColorResources.primaryColor
-          //                   ])),
-          //               child: SafeArea(
-          //                 child: Padding(
-          //                   padding: EdgeInsets.only(
-          //                       left: screenWidth * 0.05,
-          //                       top: screenHeight * 0.02),
-          //                   child: Row(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       IconButton(
-          //                         icon: Icon(
-          //                           Icons.menu,
-          //                           color: ColorResources.scaffoldColor,
-          //                           size: 40,
-          //                         ),
-          //                         onPressed: () =>
-          //                             _key.currentState!.openDrawer(),
-          //                       ),
-          //                       SizedBox(
-          //                         width: screenWidth * 0.03,
-          //                       ),
-          //                       // Expanded(
-          //                       //   child: SizedBox(
-          //                       //     width: screenWidth * 0.75,
-          //                       //     child: Image.asset('assets/images/logo.png'),
-          //                       //   ),
-          //                       // )
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       BlocConsumer<MyLoanBloc, MyLoanState>(
-          //         listener: (context, state) {
-          //           if (state.status.hasError) {
-          //             showSnackBar(context, state, _textTheme);
-          //           }
-          //         },
-          //         builder: (BuildContext context, state) {
-          //           return Container(
-          //               margin: EdgeInsets.only(top: screenHeight * 0.28),
-          //               color: ColorResources.scaffoldColor,
-          //               height: screenHeight * 0.8,
-          //               width: screenWidth,
-          //               child: Padding(
-          //                 padding: EdgeInsets.only(top: screenHeight * 0.05),
-          //                 child: state.status.isLoading
-          //                     ? ListView(children: [
-          //                         Padding(
-          //                             padding: EdgeInsets.symmetric(
-          //                                 horizontal: screenWidth * 0.03),
-          //                             child: Text(
-          //                               'Loan Status',
-          //                               style: _textTheme.headlineMedium,
-          //                             )),
-          //                         Column(
-          //                           children: List.generate(
-          //                             4,
-          //                             (index) => Column(children: [
-          //                               Padding(
-          //                                 padding: EdgeInsets.symmetric(
-          //                                   horizontal: screenWidth * 0.03,
-          //                                 ),
-          //                                 child: Shimmer.fromColors(
-          //                                     baseColor: Colors.grey.shade300,
-          //                                     highlightColor:
-          //                                         Colors.grey.shade100,
-          //                                     child: Container(
-          //                                       height: screenHeight * 0.1,
-          //                                       width: double.infinity,
-          //                                       color: Colors.white,
-          //                                     )),
-          //                               ),
-          //                               SizedBox(
-          //                                 height: 15,
-          //                               )
-          //                             ]),
-          //                           ),
-          //                         )
-          //                       ])
-          //                     : ListView(children: [
-          //                         Padding(
-          //                             padding: EdgeInsets.symmetric(
-          //                                 horizontal: screenWidth * 0.03),
-          //                             child: Text(
-          //                               'Loan Status',
-          //                               style: _textTheme.headlineMedium,
-          //                             )),
-          //                         SizedBox(
-          //                           height: 10,
-          //                         ),
-          //                         Padding(
-          //                           padding: EdgeInsets.symmetric(
-          //                             horizontal: screenWidth * 0.03,
-          //                           ),
-          //                           child: Container(
-          //                             width: double.infinity,
-          //                             height: screenHeight * 0.1,
-          //                             decoration: BoxDecoration(
-          //                               color: ColorResources.scaffoldColor,
-          //                               boxShadow: [
-          //                                 BoxShadow(
-          //                                   color: ColorResources.blurColor,
-          //                                   blurRadius: 2,
-          //                                   offset:
-          //                                       Offset(0, 1), // Shadow position
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                             child: Padding(
-          //                               padding: EdgeInsets.all(10),
-          //                               child: Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   Column(
-          //                                     mainAxisAlignment:
-          //                                         MainAxisAlignment.center,
-          //                                     crossAxisAlignment:
-          //                                         CrossAxisAlignment.start,
-          //                                     children: [
-          //                                       Text(
-          //                                         'Approved',
-          //                                         style: _textTheme.titleSmall
-          //                                             ?.copyWith(
-          //                                           fontWeight: FontWeight.w600,
-          //                                           color: ColorResources
-          //                                               .secondaryColor,
-          //                                         ),
-          //                                       ),
-          //                                       SizedBox(height: 4),
-          //                                       Text(
-          //                                         'Approved by all banks',
-          //                                         style: _textTheme.labelMedium
-          //                                             ?.copyWith(
-          //                                                 color: ColorResources
-          //                                                     .lightStatusTextColor),
-          //                                       ),
-          //                                     ],
-          //                                   ),
-          //                                   Text(
-          //                                     state.myLoanStatus[1]['approved']
-          //                                         .toString(),
-          //                                     style: _textTheme.titleSmall
-          //                                         ?.copyWith(
-          //                                             color: ColorResources
-          //                                                 .secondaryColor),
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         SizedBox(
-          //                           height: 10,
-          //                         ),
-          //                         Padding(
-          //                           padding: EdgeInsets.symmetric(
-          //                             horizontal: screenWidth * 0.03,
-          //                           ),
-          //                           child: Container(
-          //                             width: double.infinity,
-          //                             height: screenHeight * 0.1,
-          //                             decoration: BoxDecoration(
-          //                               color: ColorResources.scaffoldColor,
-          //                               boxShadow: [
-          //                                 BoxShadow(
-          //                                   color: ColorResources.blurColor,
-          //                                   blurRadius: 2,
-          //                                   offset:
-          //                                       Offset(0, 1), // Shadow position
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                             child: Padding(
-          //                               padding: EdgeInsets.all(10),
-          //                               child: Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   Column(
-          //                                     mainAxisAlignment:
-          //                                         MainAxisAlignment.center,
-          //                                     crossAxisAlignment:
-          //                                         CrossAxisAlignment.start,
-          //                                     children: [
-          //                                       Text(
-          //                                         'Pending',
-          //                                         style: _textTheme.titleSmall
-          //                                             ?.copyWith(
-          //                                           fontWeight: FontWeight.w600,
-          //                                           color: ColorResources
-          //                                               .secondaryColor,
-          //                                         ),
-          //                                       ),
-          //                                       SizedBox(height: 4),
-          //                                       Text(
-          //                                         'Waiting Approval',
-          //                                         style: _textTheme.labelMedium
-          //                                             ?.copyWith(
-          //                                                 color: ColorResources
-          //                                                     .lightStatusTextColor),
-          //                                       ),
-          //                                     ],
-          //                                   ),
-          //                                   Text(
-          //                                     state.myLoanStatus[0]['pending']
-          //                                         .toString(),
-          //                                     style: _textTheme.titleSmall
-          //                                         ?.copyWith(
-          //                                             color: ColorResources
-          //                                                 .secondaryColor),
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         SizedBox(
-          //                           height: 10,
-          //                         ),
-          //                         Padding(
-          //                           padding: EdgeInsets.symmetric(
-          //                             horizontal: screenWidth * 0.03,
-          //                           ),
-          //                           child: Container(
-          //                             width: double.infinity,
-          //                             height: screenHeight * 0.1,
-          //                             decoration: BoxDecoration(
-          //                               color: ColorResources.scaffoldColor,
-          //                               boxShadow: [
-          //                                 BoxShadow(
-          //                                   color: ColorResources.blurColor,
-          //                                   blurRadius: 2,
-          //                                   offset:
-          //                                       Offset(0, 1), // Shadow position
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                             child: Padding(
-          //                               padding: EdgeInsets.all(10),
-          //                               child: Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   Column(
-          //                                     mainAxisAlignment:
-          //                                         MainAxisAlignment.center,
-          //                                     crossAxisAlignment:
-          //                                         CrossAxisAlignment.start,
-          //                                     children: [
-          //                                       Text(
-          //                                         'Declined',
-          //                                         style: _textTheme.titleSmall
-          //                                             ?.copyWith(
-          //                                           fontWeight: FontWeight.w600,
-          //                                           color: ColorResources
-          //                                               .secondaryColor,
-          //                                         ),
-          //                                       ),
-          //                                       SizedBox(height: 4),
-          //                                       Text(
-          //                                         'Declined by banks',
-          //                                         style: _textTheme.labelMedium
-          //                                             ?.copyWith(
-          //                                                 color: ColorResources
-          //                                                     .lightStatusTextColor),
-          //                                       ),
-          //                                     ],
-          //                                   ),
-          //                                   Text(
-          //                                     state.myLoanStatus[3]['declined']
-          //                                         .toString(),
-          //                                     style: _textTheme.titleSmall
-          //                                         ?.copyWith(
-          //                                             color: ColorResources
-          //                                                 .secondaryColor),
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         SizedBox(
-          //                           height: 10,
-          //                         ),
-          //                         Padding(
-          //                           padding: EdgeInsets.symmetric(
-          //                             horizontal: screenWidth * 0.03,
-          //                           ),
-          //                           child: Container(
-          //                             width: double.infinity,
-          //                             height: screenHeight * 0.1,
-          //                             decoration: BoxDecoration(
-          //                               color: ColorResources.scaffoldColor,
-          //                               boxShadow: [
-          //                                 BoxShadow(
-          //                                   color: ColorResources.blurColor,
-          //                                   blurRadius: 2,
-          //                                   offset:
-          //                                       Offset(0, 1), // Shadow position
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                             child: Padding(
-          //                               padding: EdgeInsets.all(10),
-          //                               child: Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   Column(
-          //                                     mainAxisAlignment:
-          //                                         MainAxisAlignment.center,
-          //                                     crossAxisAlignment:
-          //                                         CrossAxisAlignment.start,
-          //                                     children: [
-          //                                       Text(
-          //                                         'Closed',
-          //                                         style: _textTheme.titleSmall
-          //                                             ?.copyWith(
-          //                                           fontWeight: FontWeight.w600,
-          //                                           color: ColorResources
-          //                                               .secondaryColor,
-          //                                         ),
-          //                                       ),
-          //                                       SizedBox(height: 4),
-          //                                       Text(
-          //                                         'Fully Paid Loans',
-          //                                         style: _textTheme.labelMedium
-          //                                             ?.copyWith(
-          //                                                 color: ColorResources
-          //                                                     .lightStatusTextColor),
-          //                                       ),
-          //                                     ],
-          //                                   ),
-          //                                   Text(
-          //                                     state.myLoanStatus[2]['closed']
-          //                                         .toString(),
-          //                                     style: _textTheme.titleSmall
-          //                                         ?.copyWith(
-          //                                             color: ColorResources
-          //                                                 .secondaryColor),
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         SizedBox(
-          //                           height: 5,
-          //                         ),
-          //                       ]),
-          //               ));
-          //         },
-          //       ),
-          //       state.status.isLoading
-          //           ? DashboardCard(
-          //               screenHeight: screenHeight,
-          //               screenWidth: screenWidth,
-          //               textTheme: _textTheme)
-          //           : state.status.isSuccess
-          //               ? DashboardCard(
-          //                   screenHeight: screenHeight,
-          //                   screenWidth: screenWidth,
-          //                   textTheme: _textTheme,
-          //                   hasData: true,
-          //                   bankInfo: state.bankInfo,
-          //                 )
-          //               : DashboardCard(
-          //                   screenHeight: screenHeight,
-          //                   screenWidth: screenWidth,
-          //                   textTheme: _textTheme,
-          //                   hasData: false)
-          //     ]);
-          //   },
-          // ),
-
-          body: SafeArea(
-            child: Column(children: [
-              Stack(
-                children: [
-                  Container(
-                    height: screenWidth * 0.6,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.menu,
-                                color: ColorResources.scaffoldColor,
-                                size: 30,
-                              ),
-                              onPressed: () => _key.currentState!.openDrawer(),
+      body: SafeArea(
+            child: Stack(
+              children: [
+                Column(
+                  children:[
+                    Container(
+                  height: screenWidth * 0.6,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.menu,
+                              color: ColorResources.scaffoldColor,
+                              size: 30,
                             ),
-                            SizedBox(height: 5,),
+                            onPressed: () => _key.currentState!.openDrawer(),
+                          ),
+                          SizedBox(height: 5,),
 
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                              child:
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Hello, ${state.userInfo?.name == null ? '_' : state.userInfo?.name.split(' ')[0] }',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorResources.scaffoldColor),
-                                  ),
-                                  SizedBox(height: 2,),
-                                  Text('What would like to do?',style: TextStyle(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.w100
-                                  ),)
-                                ],
-                              )
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child:
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Hello, ${state.userInfo?.name == null ? '_' : state.userInfo?.name.split(' ')[0] }',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorResources.scaffoldColor),
+                                ),
+                                SizedBox(height: 2,),
+                                Text('What you would like to do?',style: TextStyle(
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w100
+                                ),),
 
-                            ),
+                              ],
+                            )
 
-                          ]),
-                    ),
-                    decoration: BoxDecoration(
-                        color: ColorResources.accentColor,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20))),
+                          ),
+
+                        ]),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(23),
-                    child: Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
+                  decoration: BoxDecoration(
+                      color: ColorResources.accentColor,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20))),
+                ),
+                    SizedBox(height: 80,),
+                    Expanded(
+                      child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ListView(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height:  50,
+                        ),
+                        Text(
+                          'Quick Links',
+                          style: _textTheme.titleMedium?.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: ColorResources.accentColor),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
 
-                              margin: EdgeInsets.only(top: screenHeight * 0.13),
-                              decoration: BoxDecoration(
-                                  color: ColorResources.cardColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black12, offset: Offset(1, 5))
-                                  ]),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 14, right: 20, top: 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 6,
+                              child: GestureDetector(
+                                onTap:()=>{
+                                  Navigator.pushNamed(context, RouteHelper.myLoans)
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color:
+                                        Color.fromRGBO(233, 207, 213, 1),
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.account_balance,
+                                            color: Color(0xffF4EFF1),
+                                            size: 50,
+                                          ),
+                                          SizedBox(
+                                            height: screenHeight * 0.014,
+                                          ),
+                                          Text(
+                                            'My Loans',
+                                            style: _textTheme.titleMedium
+                                                ?.copyWith(
+                                                fontWeight:
+                                                FontWeight.w700,
+                                                fontSize: 15,
+                                                color: Color(0xffF4EFF1)),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: GestureDetector(
+                                onTap:()=>{
+                                  Navigator.pushNamed(context, RouteHelper.myCollaterals)
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffB7C9C5),
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.directions_car,
+                                            color: Color(0xffF4EFF1),
+                                            size: 50,
+                                          ),
+                                          SizedBox(
+                                            height: screenHeight * 0.014,
+                                          ),
+                                          Text(
+                                            'My Collaterals',
+                                            style: _textTheme.titleMedium
+                                                ?.copyWith(
+                                                fontWeight:
+                                                FontWeight.w700,
+                                                fontSize: 15,
+                                                color: Color(0xffF4EFF1)),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+
+                            Expanded(
+                              flex: 6,
+                              child: GestureDetector(
+                                onTap:()=>{
+                                  Navigator.pushNamed(context, RouteHelper.loanRequest)
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffccd9f8),
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          FaIcon(
+                                            FontAwesomeIcons.handHoldingDollar,
+                                            color: Color(0xffF4EFF1),
+                                            size: 50,
+                                          ),
+
+                                          SizedBox(
+                                            height: screenHeight * 0.014,
+                                          ),
+                                          Text(
+                                            'Apply For Loan',
+                                            style: _textTheme.titleMedium
+                                                ?.copyWith(
+                                                fontWeight:
+                                                FontWeight.w700,
+                                                fontSize: 15,
+                                                color: Color(0xffF4EFF1)),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffa8b9c9),
+                                      borderRadius:
+                                      BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 20),
-                                              child: Text(
-                                                'Total Credits',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff444445)),
-                                              ),
-                                            ),
-                                            Row(children: [
-                                              Icon(
-                                                Icons.circle,
-                                                color: Colors.green,
-                                                size: 12,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                '29 Birr',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff727387)),
-                                              )
-                                            ])
-                                          ],
+                                        Icon(
+                                          Icons.help,
+                                          color: Color(0xffF4EFF1),
+                                          size: 50,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 20),
-                                              child: Text(
-                                                'Total Score',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff444445)),
-                                              ),
-                                            ),
-                                            Row(children: [
-                                              Icon(
-                                                Icons.circle,
-                                                color: Colors.green,
-                                                size: 12,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                state.userInfo?.score.toString() ??
-                                                    '_',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff727387)),
-                                              )
-                                            ])
-                                          ],
+                                        SizedBox(
+                                          height: screenHeight * 0.014,
+                                        ),
+                                        Text(
+                                          'Help Center',
+                                          style: _textTheme.titleMedium
+                                              ?.copyWith(
+                                              fontWeight:
+                                              FontWeight.w700,
+                                              fontSize: 15,
+                                              color: Color(0xffF4EFF1)),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Divider(
-                                    thickness: 1,
-                                    color:
-                                        ColorResources.accentColor.withOpacity(0.2),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 1, horizontal: 20),
-                                    child: BlocConsumer<MyLoanBloc, MyLoanState>(
-                                        listener: (context, state) {
-                                      if (state.status.hasError) {
-                                        showSnackBar(context, state, _textTheme);
-                                      }
-                                    }, builder: (context, state) {
-                                      return Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text('Total Approved Loans'),
-                                                Text(state.status.isSuccess
-                                                    ? state.myLoanStatus[1]
-                                                ['approved']
-                                                    .toString()
-                                                    : '_')
-                                              ]),
-
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text('Total Pending Loans'),
-                                                Text(state.status.isSuccess
-                                                    ? state.myLoanStatus[0]
-                                                            ['pending']
-                                                        .toString()
-                                                    : '_')
-                                              ]),
-
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text('Total Declined Loans'),
-                                                Text(state.status.isSuccess
-                                                    ? state.myLoanStatus[3]
-                                                            ['declined']
-                                                        .toString()
-                                                    : '_')
-                                              ]),
-
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text('Total Closed Loans'),
-                                                Text(state.status.isSuccess
-                                                    ? state.myLoanStatus[2]
-                                                            ['closed']
-                                                        .toString()
-                                                    : '_')
-                                              ]),
-
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-
-                                          // Text(
-                                          //     'Total Declined Loans :           ${state.myLoanStatus[3]['declined'].toString()}',
-                                          //     style: TextStyle(
-                                          //         fontSize: 13,
-                                          //         fontWeight: FontWeight.w600,
-                                          //         color: Color(0xff66676c))),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          // Text(
-                                          //     'Total Closed Loans :               ${state.myLoanStatus[2]['closed'] .toString()}',
-                                          //     style: TextStyle(
-                                          //         fontSize: 13,
-                                          //         fontWeight: FontWeight.w600,
-                                          //         color: Color(0xff66676c))),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          // Text(
-                                          //     'Total Approved Loans :         ${state.myLoanStatus[1]['approved'].toString()}',
-                                          //     style: TextStyle(
-                                          //         fontSize: 13,
-                                          //         fontWeight: FontWeight.w600,
-                                          //         color: Color(0xff66676c))),
-                                        ],
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
+                                  )),
                             ),
-                            SizedBox(
-                              height: screenHeight * 0.03,
-                            ),
-                            
-                            Text(
-                              'Quick Links',
-                              style: _textTheme.titleMedium?.copyWith(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorResources.accentColor),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 6,
-                                  child: GestureDetector(
-                                    onTap:()=>{
-                                      Navigator.pushNamed(context, RouteHelper.myLoans)
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Color.fromRGBO(233, 207, 213, 1),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(15),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(
-                                                Icons.account_balance,
-                                                color: Color(0xffF4EFF1),
-                                                size: 50,
-                                              ),
-                                              SizedBox(
-                                                height: screenHeight * 0.014,
-                                              ),
-                                              Text(
-                                                'My Loans',
-                                                style: _textTheme.titleMedium
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15,
-                                                        color: Color(0xffF4EFF1)),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: GestureDetector(
-                                    onTap:()=>{
-                                      Navigator.pushNamed(context, RouteHelper.myCollaterals)
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffB7C9C5),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(15),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(
-                                                Icons.directions_car,
-                                                color: Color(0xffF4EFF1),
-                                                size: 50,
-                                              ),
-                                              SizedBox(
-                                                height: screenHeight * 0.014,
-                                              ),
-                                              Text(
-                                                'My Collaterals',
-                                                style: _textTheme.titleMedium
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15,
-                                                        color: Color(0xffF4EFF1)),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                             Row(
-                                children: [
 
-                                  Expanded(
-                                    flex: 6,
-                                    child: GestureDetector(
-                                      onTap:()=>{
-                                        Navigator.pushNamed(context, RouteHelper.loanRequest)
-                                      },
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Color(0xffccd9f8),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(15),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                FaIcon(
-                                                FontAwesomeIcons.handHoldingDollar,
-                                                  color: Color(0xffF4EFF1),
-                                                  size: 50,
-                                                ),
-
-                                                SizedBox(
-                                                  height: screenHeight * 0.014,
-                                                ),
-                                                Text(
-                                                  'Apply For Loan',
-                                                  style: _textTheme.titleMedium
-                                                      ?.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontSize: 15,
-                                                          color: Color(0xffF4EFF1)),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffa8b9c9),
-                                            borderRadius:
-                                            BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(15),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(
-                                                Icons.help,
-                                                color: Color(0xffF4EFF1),
-                                                size: 50,
-                                              ),
-                                              SizedBox(
-                                                height: screenHeight * 0.014,
-                                              ),
-                                              Text(
-                                                'Help Center',
-                                                style: _textTheme.titleMedium
-                                                    ?.copyWith(
-                                                    fontWeight:
-                                                    FontWeight.w700,
-                                                    fontSize: 15,
-                                                    color: Color(0xffF4EFF1)),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                  ),
-
-                                ],
-                              ),
-
-                          ]),
-                    ),
+                          ],
+                        ),
+                       SizedBox(height: 10,)
+                      ],
                   ),
-                ],
-              )
-            ]),
+                ),
+                    )
+              ]),
+                Padding(
+                  padding: EdgeInsets.all(23),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+
+                          margin: EdgeInsets.only(top: 90),
+                          decoration: BoxDecoration(
+                              color: ColorResources.cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black12, offset: Offset(1, 5))
+                              ]),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 14, right: 20, top: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            'Total Credits',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff444445)),
+                                          ),
+                                        ),
+                                        Row(children: [
+                                          Icon(
+                                            Icons.circle,
+                                            color: Colors.green,
+                                            size: 12,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            '29 Birr',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff727387)),
+                                          )
+                                        ])
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            'Total Score',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff444445)),
+                                          ),
+                                        ),
+                                        Row(children: [
+                                          Icon(
+                                            Icons.circle,
+                                            color: Colors.green,
+                                            size: 12,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            state.userInfo?.score.toString() ??
+                                                '_',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff727387)),
+                                          )
+                                        ])
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color:
+                                    ColorResources.accentColor.withOpacity(0.2),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 1, horizontal: 20),
+                                child: BlocConsumer<MyLoanBloc, MyLoanState>(
+                                    listener: (context, state) {
+                                  if (state.status.hasError) {
+                                    showSnackBar(context, state, _textTheme);
+                                  }
+                                }, builder: (context, state) {
+                                  return Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Total Approved Loans'),
+                                            Text(state.status.isSuccess
+                                                ? state.myLoanStatus[1]
+                                            ['approved']
+                                                .toString()
+                                                : '_')
+                                          ]),
+
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Total Pending Loans'),
+                                            Text(state.status.isSuccess
+                                                ? state.myLoanStatus[0]
+                                                        ['pending']
+                                                    .toString()
+                                                : '_')
+                                          ]),
+
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Total Declined Loans'),
+                                            Text(state.status.isSuccess
+                                                ? state.myLoanStatus[3]
+                                                        ['declined']
+                                                    .toString()
+                                                : '_')
+                                          ]),
+
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Total Closed Loans'),
+                                            Text(state.status.isSuccess
+                                                ? state.myLoanStatus[2]
+                                                        ['closed']
+                                                    .toString()
+                                                : '_')
+                                          ]),
+
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+
+                                      // Text(
+                                      //     'Total Declined Loans :           ${state.myLoanStatus[3]['declined'].toString()}',
+                                      //     style: TextStyle(
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.w600,
+                                      //         color: Color(0xff66676c))),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      // Text(
+                                      //     'Total Closed Loans :               ${state.myLoanStatus[2]['closed'] .toString()}',
+                                      //     style: TextStyle(
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.w600,
+                                      //         color: Color(0xff66676c))),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      // Text(
+                                      //     'Total Approved Loans :         ${state.myLoanStatus[1]['approved'].toString()}',
+                                      //     style: TextStyle(
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.w600,
+                                      //         color: Color(0xff66676c))),
+                                    ],
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                      ]),
+                ),
+              ],
+            ),
           ),
         );
       }),

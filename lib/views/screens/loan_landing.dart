@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../bloc/banks/banks_bloc.dart';
-import '../../bloc/collateral_post/collateral_post_bloc.dart';
-import '../../bloc/my_loan/my_loan_bloc.dart';
-import '../../bloc/person/personal_bloc.dart';
-import '../../bloc/user_profile/user_profile_bloc.dart';
-import '../../data/api/api_client.dart';
-import '../../helpers/route_helper.dart';
-import '../../repositories/bank_repo.dart';
-import '../../repositories/user_repo.dart';
 import '../../utils/color_resource.dart';
 import 'loan_request.dart';
 class LoanLanding extends StatelessWidget {
@@ -49,7 +38,7 @@ class LoanLanding extends StatelessWidget {
               height: 40,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.only(left: 20,right: 20,bottom: 20),
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16),
@@ -59,9 +48,11 @@ class LoanLanding extends StatelessWidget {
                 ),
 
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
-                      context, RouteHelper.loanRequest);
-
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoanRequest()),
+                        (Route<dynamic> route) => false,
+                  );
                 },
                 child: Text(
                   "Make a request",

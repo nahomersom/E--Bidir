@@ -8,7 +8,7 @@ class LoanDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(loanDetail[0].value);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -89,7 +89,7 @@ class LoanDetail extends StatelessWidget {
                   title: Text('Bank'),
                   trailing: Text(
                       loanDetail[1].value
-                  ),
+ ?? '-'                  ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -102,7 +102,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Status'),
                     trailing: Text(
                         loanDetail[3].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -115,7 +115,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Job'),
                     trailing: Text(
                         loanDetail[9].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -128,7 +128,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Type Of Loan'),
                     trailing: Text(
                         loanDetail[8].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -141,7 +141,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Type Of Collatera'),
                     trailing: Text(
                         loanDetail[2].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -154,7 +154,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Annual Interest'),
                     trailing: Text(
                         loanDetail[7].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -167,7 +167,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Loan Amount'),
                     trailing: Text(
                         loanDetail[4].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -180,7 +180,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Monthly Payment'),
                     trailing: Text(
                         loanDetail[6].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -193,7 +193,7 @@ class LoanDetail extends StatelessWidget {
                     title: Text('Loan Payment Period'),
                     trailing: Text(
                         loanDetail[5].value
-                    ),
+ ?? '-'                    ),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -205,7 +205,7 @@ class LoanDetail extends StatelessWidget {
                     ),
                     title: Text('Score'),
                     trailing: Text(
-                        loanDetail[10].value
+                        loanDetail[10].value ?? '-'
                     ),
                   ),
                   Padding(
@@ -218,7 +218,7 @@ class LoanDetail extends StatelessWidget {
                     ),
                     title: Text('Rank'),
                     trailing: Text(
-                        loanDetail[11].value
+                        loanDetail[11].value ?? '-'
                     ),
                   ),
                 ],

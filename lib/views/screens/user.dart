@@ -3,6 +3,7 @@ import 'package:e_bidir/repositories/user_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../data/api/api_client.dart';
 import '../../helpers/route_helper.dart';
@@ -74,24 +75,32 @@ class _UserState extends State<User> {
               children: [
                 Align(
                     alignment: Alignment.bottomLeft,
-                    child: IconButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, RouteHelper.home),
-                      icon: Icon(
-                        Icons.arrow_back_sharp,
-                        weight: 30,
-                        size: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:[
+                        IconButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, RouteHelper.home),
+                        icon: FaIcon(
+                          FontAwesomeIcons.arrowLeft,
+
+                          size: 30,
+                        ),
+                        color: ColorResources.accentColor,
                       ),
-                      color: ColorResources.accentColor,
+                        Text(
+                          'User Profile',
+
+                          style: _textTheme.headlineSmall?.copyWith(
+                              color: ColorResources.accentColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(),
+                        SizedBox()
+                      ]
                     )),
-                Text(
-                  'User Profile',
-                  textAlign: TextAlign.center,
-                  style: _textTheme.headlineSmall?.copyWith(
-                      color: ColorResources.accentColor,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
+                SizedBox(height: 10,),
                 Container(
                   height: SizeConfig.screenHeight! * 0.14,
                   child: ListView.builder(

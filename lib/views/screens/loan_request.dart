@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../bloc/create_loan/create_loan_bloc.dart';
@@ -580,26 +581,31 @@ class _LoanRequestState extends State<LoanRequest> {
                   children: [
                     Align(
                         alignment: Alignment.bottomLeft,
-                        child: IconButton(
-                          onPressed: () => {
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:[
+                              IconButton(
+                                onPressed: () =>
+                                    Navigator.pushNamed(context, RouteHelper.home),
+                                icon: FaIcon(
+                                  FontAwesomeIcons.arrowLeft,
 
-                            Navigator.pushReplacementNamed(
-                              context, RouteHelper.home)},
-                          icon: Icon(
-                            Icons.arrow_back_sharp,
-                            weight: 30,
-                            size: 40,
-                          ),
-                          color: ColorResources.accentColor,
+                                  size: 30,
+                                ),
+                                color: ColorResources.accentColor,
+                              ),
+                              Text(
+                                'Loan Request',
+
+                                style: _textTheme.headlineSmall?.copyWith(
+                                    color: ColorResources.accentColor,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(),
+                              SizedBox()
+                            ]
                         )),
-                    Text(
-                      'Loan Request',
-                      textAlign: TextAlign.center,
-                      style: _textTheme.headlineSmall?.copyWith(
-                          color: ColorResources.accentColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
                     SizedBox(height: 10,),
                     Container(
                       height: SizeConfig.screenHeight! * 0.14,

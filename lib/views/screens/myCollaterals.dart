@@ -2,8 +2,10 @@ import 'package:e_bidir/bloc/collateral/collaterals_bloc.dart';
 import 'package:e_bidir/bloc/my_loan/my_loan_bloc.dart';
 import 'package:e_bidir/data/api/api_client.dart';
 import 'package:e_bidir/utils/color_resource.dart';
+import 'package:e_bidir/views/screens/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../bloc/banks/banks_bloc.dart';
@@ -11,6 +13,7 @@ import '../../data/model/car.dart';
 import '../../data/model/my_loan/my_loan_info.dart';
 import '../../repositories/bank_repo.dart';
 import '../../repositories/user_repo.dart';
+import 'coallateral_detail.dart';
 
 int currentIndex = 0;
 
@@ -87,11 +90,9 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                                   setState(() {
                                     currentIndex = 0;
                                   });
-
                                 },
-                                child: Text('Cars',
-
-
+                                child: Text(
+                                  'Cars',
                                 ),
                               ),
                               TextButton(
@@ -111,9 +112,8 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                               allowSorting: true,
                               allowMultiColumnSorting: true,
                               allowFiltering: true,
-                              showCheckboxColumn: true,
                               frozenColumnsCount: 1,
-                              selectionMode: SelectionMode.multiple,
+                              selectionMode: SelectionMode.none,
                               columnWidthMode: ColumnWidthMode.auto,
                               source: employeeDataSource,
                               columns: <GridColumn>[
@@ -125,6 +125,12 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                                 //         child: Text(
                                 //           'Image',
                                 //         ))),
+                                GridColumn(
+                                    columnName: 'Detail',
+                                    label: Container(
+                                        padding: EdgeInsets.all(1.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Detail'))),
                                 GridColumn(
                                     columnName: currentIndex == 0
                                         ? 'Type_of_Vehicle'
@@ -178,6 +184,56 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                                         child: Text(currentIndex == 0
                                             ? 'Mileage'
                                             : 'Purpose Of The Building'))),
+                                GridColumn(
+                                    columnName: currentIndex == 0
+                                        ? 'Year_of_Manufacture'
+                                        : 'Construction_Status',
+                                    label: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        alignment: Alignment.center,
+                                        child: Text(currentIndex == 0
+                                            ? 'Year Of Manufacture'
+                                            : 'Construction Status'))),
+                                GridColumn(
+                                    columnName: currentIndex == 0
+                                        ? 'Country_of_Manufacture'
+                                        : 'utility',
+                                    label: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        alignment: Alignment.center,
+                                        child: Text(currentIndex == 0
+                                            ? 'Country Of Manufacturer'
+                                            : 'utility'))),
+                                GridColumn(
+                                    columnName: currentIndex == 0
+                                        ? 'Number_of_Cylinders'
+                                        : 'Collateral_Coverage_Ratio',
+                                    label: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        alignment: Alignment.center,
+                                        child: Text(currentIndex == 0
+                                            ? 'Number of Cylinders'
+                                            : 'Collateral Coverage Ratio'))),
+                                GridColumn(
+                                    columnName: currentIndex == 0
+                                        ? 'Horsepower'
+                                        : 'Building_Score',
+                                    label: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        alignment: Alignment.center,
+                                        child: Text(currentIndex == 0
+                                            ? 'Horsepower'
+                                            : 'Building Score'))),
+                                GridColumn(
+                                    columnName: currentIndex == 0
+                                        ? 'carScore'
+                                        : 'blueprintId',
+                                    label: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        alignment: Alignment.center,
+                                        child: Text(currentIndex == 0
+                                            ? 'carScore'
+                                            : 'Blue Print Id')))
                               ],
                             ),
                           )
@@ -210,6 +266,7 @@ class CollateralDataSource extends DataGridSource {
     _employeeData = myCarData
         .map<DataGridRow>((e) => DataGridRow(cells: [
               // DataGridCell<String>(columnName: 'Image', value:  e.carImage.isNotEmpty ? 'yes image':'no image'),
+              DataGridCell<Widget>(columnName: 'Detail', value: null),
               DataGridCell<String>(
                   columnName: currentIndex == 0
                       ? 'Type_of_Vehicle'
@@ -242,6 +299,39 @@ class CollateralDataSource extends DataGridSource {
                   value: currentIndex == 0
                       ? e.Mileage.toString()
                       : e.Purpose_of_the_Building.toString()),
+
+              DataGridCell<String>(
+                  columnName: currentIndex == 0
+                      ? 'Year_of_Manufacture'
+                      : 'Construction_Status',
+                  value: currentIndex == 0
+                      ? e.Year_of_Manufacture.toString()
+                      : e.Construction_Status.toString()),
+
+              DataGridCell<String>(
+                  columnName:
+                      currentIndex == 0 ? 'Country_of_Manufacture' : 'utility',
+                  value: currentIndex == 0
+                      ? e.Country_of_Manufacture.toString()
+                      : e.utility.toString()),
+              DataGridCell<String>(
+                  columnName: currentIndex == 0
+                      ? 'Number_of_Cylinders'
+                      : 'Collateral_Coverage_Ratio',
+                  value: currentIndex == 0
+                      ? e.Number_of_Cylinders.toString()
+                      : e.Collateral_Coverage_Ratio.toString()),
+              DataGridCell<String>(
+                  columnName:
+                      currentIndex == 0 ? 'Horsepower' : 'Building_Score',
+                  value: currentIndex == 0
+                      ? e.Horsepower.toString()
+                      : e.Building_Score.toString()),
+              DataGridCell<String>(
+                  columnName: currentIndex == 0 ? 'carScore' : 'blueprintId',
+                  value: currentIndex == 0
+                      ? e.carScore.toString()
+                      : e.blueprintId.toString())
             ]))
         .toList();
   }
@@ -258,7 +348,23 @@ class CollateralDataSource extends DataGridSource {
       return Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(8.0),
-        child: Text(e.value.toString()),
+        child: e.columnName == 'Detail'
+            ? LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                return IconButton(
+                    onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      CollateralDetail(type:currentIndex,loanDetail: row.getCells()))),
+                        },
+                    icon: FaIcon(
+                      FontAwesomeIcons.circleInfo,
+                      color: ColorResources.accentColor,
+                    ));
+              })
+            : Text(e.value.toString()),
       );
     }).toList());
   }

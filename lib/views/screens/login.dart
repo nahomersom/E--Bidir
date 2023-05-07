@@ -1,13 +1,10 @@
 import 'package:e_bidir/bloc/login/login_bloc.dart';
-import 'package:e_bidir/data/api/api.dart';
-import 'package:e_bidir/helpers/route_helper.dart';
 import 'package:e_bidir/utils/color_resource.dart';
 import 'package:e_bidir/views/screens/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/model/login_model.dart';
 import '../../data/model/user.dart';
 import '../widgets/shared_button.dart';
 import '../widgets/shared_text_field.dart';
