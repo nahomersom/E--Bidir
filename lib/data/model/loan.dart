@@ -10,7 +10,7 @@ class Loan extends Equatable {
   final String Bank;
   final String Type_Of_Loan;
   final String Types_of_Collateral;
-  final int Monthly_payment;
+  final double Monthly_payment;
   final double interest;
 
   const Loan(

@@ -197,7 +197,9 @@ class Dashboard extends StatelessWidget {
 
                               context.read<LoginBloc>().add(LogoutRequest());
 
-                              Navigator.pushNamed(context, RouteHelper.login);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(RouteHelper.login, (Route<dynamic> route) => false);
+
                             },
                           )..show();
                         });

@@ -27,13 +27,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       emit(state.copyWith(status: LoginStatus.loading, errorMessage: ''));
       Response? response = await authRepo.login(event.user);
+      print('ere');
+      print(jsonDecode(response.body));
       LoginModel loginResponse = LoginModel.fromJson(jsonDecode(response.body));
       authenticationCubit.onAuthenticateRequest(loginResponse);
-      emit(state.copyWith(
-          status: LoginStatus.success, user: loginResponse, errorMessage: ''));
+      if(jsonDecode(response.body)['login']['role']!='bank'){
+        emit(state.copyWith(
+            status: LoginStatus.success, user: loginResponse, errorMessage: ''));
+      }else{
+        emit(state.copyWith(
+            status: LoginStatus.error, errorMessage:'You don\'t have have access'));
+      }
+
+
     } catch (e) {
       emit(state.copyWith(
-          status: LoginStatus.error, errorMessage: e.toString()));
+          status: LoginStatus.error, errorMessage: e.toString().replaceAll('Exception:', '')));
     }
   }
 

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../views/screens/dashboard.dart';
 import '../views/screens/home_layout.dart';
+import '../views/screens/loan_success.dart';
 import '../views/screens/login.dart';
 import '../views/screens/myCollaterals.dart';
 class RouteHelper{
@@ -23,6 +24,7 @@ class RouteHelper{
   static const String myCollaterals = '/myCollaterals';
   static const String availableBanks = '/availableBanks';
   static const String dashboard = '/dashboard';
+  static const String loanSuccess  = '/loanSuccess';
   static const String loanRequest = '/loanRequest';
   static Route getRoute(RouteSettings settings){
     switch(settings.name){
@@ -49,7 +51,8 @@ class RouteHelper{
         return MaterialPageRoute(builder: (context)=> LoanRequest());
       case onBoard:
         return MaterialPageRoute(builder: (context)=> OnBoardingScreen());
-
+      case loanSuccess:
+        return MaterialPageRoute(builder: (context)=> LoanSuccessScreen());
       default:
         return MaterialPageRoute(builder: (context)=> const LoginScreen());
     }

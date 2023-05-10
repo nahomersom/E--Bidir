@@ -90,7 +90,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Type Of Vehicle': 'Type Of Building'),
                       trailing: Text(
-                            loanDetail[1].value
+                            loanDetail[2].value
                               ?? '-'                  ),
                     ),
                     Padding(
@@ -103,7 +103,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Brand Of Vehicle' : 'Total Area'),
                       trailing: Text(
-                          loanDetail[2].value
+                          loanDetail[3].value
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -116,7 +116,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Model Of Vehicle':'Location' ),
                       trailing: Text(
-                          loanDetail[3].value
+                           (loanDetail[4].value.length < 10) ? loanDetail[4].value : (loanDetail[4].value.substring(0, 10) + '....')
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -129,7 +129,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Plate Number': 'Distance from the main road'),
                       trailing: Text(
-                          loanDetail[4].value
+                          loanDetail[5].value
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -143,7 +143,7 @@ class CollateralDetail extends StatelessWidget {
                       title: Text(type == 0 ? 'Mileage': 'Purpose of the building'),
                       trailing: Text(
 
-                          loanDetail[5].value
+                          loanDetail[6].value
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -156,7 +156,8 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Year Of Manufacture' : 'Construction Status',),
                       trailing: Text(
-                          loanDetail[6].value
+
+                            (loanDetail[7].value.length < 10) ? loanDetail[7].value : (loanDetail[7].value.substring(0, 10) + '....')
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -169,7 +170,8 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Country Of Manufacture' : 'Utility'),
                       trailing: Text(
-                          loanDetail[7].value
+
+                            (loanDetail[8].value.length < 10) ? loanDetail[8].value : (loanDetail[8].value.substring(0, 10) + '....')
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -182,7 +184,8 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ?'Number Of Cylinders':'Collateral Coverage Ration'),
                       trailing: Text(
-                          loanDetail[8].value
+                          (loanDetail[9].value.length < 10) ? loanDetail[9].value : (loanDetail[9].value.substring(0, 10) + '....')
+                       
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -195,7 +198,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Horsepower' : 'Building Score'),
                       trailing: Text(
-                          loanDetail[9].value
+                          loanDetail[10].value
                               ?? '-'                    ),
                     ),
                     Padding(
@@ -208,7 +211,7 @@ class CollateralDetail extends StatelessWidget {
                       ),
                       title: Text(type == 0 ? 'Car Score' : 'Blue Print ID'),
                       trailing: Text(
-                          loanDetail[10].value ?? '-'
+                          loanDetail[11].value ?? '-'
                       ),
                     ),
 

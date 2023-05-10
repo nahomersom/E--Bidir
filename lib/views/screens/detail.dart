@@ -1,10 +1,12 @@
 import 'package:e_bidir/utils/color_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 class LoanDetail extends StatelessWidget {
 
    LoanDetail({Key? key,required this.loanDetail}) : super(key: key);
   final dynamic loanDetail;
+   final currencyFormatter = new NumberFormat("#,##0.00", "en_US");
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +168,7 @@ class LoanDetail extends StatelessWidget {
                     ),
                     title: Text('Loan Amount'),
                     trailing: Text(
-                        loanDetail[4].value
+                        currencyFormatter.format(int.parse(loanDetail[4].value))
  ?? '-'                    ),
                   ),
                   Padding(
@@ -179,7 +181,7 @@ class LoanDetail extends StatelessWidget {
                     ),
                     title: Text('Monthly Payment'),
                     trailing: Text(
-                        loanDetail[6].value
+                        currencyFormatter.format(double.parse(loanDetail[6].value))
  ?? '-'                    ),
                   ),
                   Padding(

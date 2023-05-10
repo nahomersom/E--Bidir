@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
+import '../../data/lists.dart';
 import 'package:e_bidir/bloc/collateral_post/collateral_post_bloc.dart';
 import 'package:e_bidir/bloc/economic/economic_bloc.dart';
 import 'dart:io';
@@ -29,11 +28,7 @@ import '../widgets/tab_button.dart';
 import '../widgets/tab_text_field.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-List<String> criminalRecords = [
-  'No',
-  'YES/PAST FIVE YEARS',
-  'YES/MORE THAN FIVE YEARS'
-];
+
 String bluePrintImage = '';
 String carImage = '';
 
@@ -73,16 +68,8 @@ List<Map<dynamic, dynamic>> banks = [
   {'name': "Zemen Bank", 'interest': 0.086},
 ];
 
-List<String> marriageStatus = ['Married', 'Unmarried'];
-List<String> educationStatus = [
-  'PHD',
-  'Doctrate',
-  'Masters',
-  'Degree',
-  'Diploma',
-  'TVET',
-  'Certificate'
-];
+
+
 List<String> typeOfLoan = [
   'Personal Loan',
   'Student Loan',
@@ -102,24 +89,8 @@ List<String> typeOfLoan = [
   'Pool loan',
   'Famil Loan'
 ];
-List<String> Location = [
-  '22(HAYAHULET)',
-  '4 kilo',
-  '6 kilo',
-  'Addisu Gebeya',
-  'Asko',
-  'Au',
-  'Aware',
-  'Ayate Babure Tabya',
-  'Ayate Beshale',
-  'Ayate',
-  'Baledras',
-  'Balere Meda',
-  'Balere',
-  'Bole Arabsa',
-  'Bole Atlas',
-  'Bole Homes'
-];
+
+
 List<String> purposeOfBuilding = [
   'Residential',
   'Commercial',
@@ -140,65 +111,10 @@ Map<String, dynamic> constructionStatus = {
   "Electro_Mechanical_Lifts": false
 };
 
-List<String> typeOfBuildings = [
-  'G+0',
-  'G+1',
-  'G+2',
-  'G+3',
-  'G+4',
-  'G+5',
-];
-List<String> constructionYear = [
-  '2023',
-  '2022',
-  '2021',
-  '2020',
-  '2019',
-  '2018',
-  '2017',
-  '2016',
-  '2015',
-  '2014',
-  '2013',
-  '2012',
-  '2011',
-  '2010',
-  '2009',
-  '2008',
-  '2007',
-  '2006',
-  '2005',
-  '2004',
-  '2003',
-  '2002',
-  '2001',
-  '2000',
-  '1999',
-  '1998',
-  '1997',
-  '1996',
-  '1995',
-  '1994',
-  '1993',
-  '1992',
-  '1991',
-  '1990'
-];
+
+
 ////////////////////////////////////////vehicle///////////////////
-List<String> typeOfVehicle = [
-  'Sedan',
-  'Micro',
-  'SUV',
-  'Pickup',
-  'van',
-  'Mini Truck',
-  'Big Truck',
-  'Bus'
-];
-List<String> brandOfVehicle = ['BYD', 'Toyota', 'Isuzu'];
-List<String> bydModel = ['BYD lift back FO', 'BYD F3 GLI (full option)'];
-List<String> toyotaModel = ['toyota tt50', 'toyota 1211'];
-List<String> isuzuModel = ['isuzu isu0', 'isuzu isu1'];
+
 List<String> cylinder = [
   "1",
   "2",
@@ -219,30 +135,8 @@ List<String> cylinder = [
   "17",
   "18",
 ];
-List<String> transmission = [
-  "Manual Transmission",
-  "Automatic Transmission",
-];
-List<String> vehicleModelYear = [
-  '2018',
-  '2017',
-  '2016',
-  '2015',
-  '2014',
-  '2013',
-  '2012',
-  '2011',
-  '2010',
-  '2009',
-  '2008',
-  '2007',
-  '2006',
-  '2005',
-  '2004',
-  '2003',
-  '2002',
-  '2001'
-];
+
+
 
 class LoanRequest extends StatefulWidget {
   const LoanRequest({Key? key}) : super(key: key);
@@ -254,11 +148,7 @@ class LoanRequest extends StatefulWidget {
 class _LoanRequestState extends State<LoanRequest> {
   _LoanRequestState() {
 
-    modelValue = brandOfVehicleValue == 'BYD'
-        ? bydModel.first
-        : brandOfVehicleValue == 'Toyota'
-            ? toyotaModel.first
-            : isuzuModel.first;
+
   }
   String? modelValue;
   List<String> tabText = ['Personal', 'Loan', 'Economic', 'Collateral'];
@@ -279,10 +169,10 @@ class _LoanRequestState extends State<LoanRequest> {
   TextEditingController _ageControl = TextEditingController();
   TextEditingController _educationStatusControl = TextEditingController();
   TextEditingController _marriageStatusControl = TextEditingController();
-  String criminalRecordValue = criminalRecords.first;
-  String martialStatusValue = marriageStatus.first;
-  String educationStatusValue = educationStatus.first;
-  String banksValue = banks.first['name'] ?? '';
+  String criminalRecordValue = constantData.CRIME.first;
+  String martialStatusValue = constantData.Marriage.first;
+  String educationStatusValue = constantData.Education.first;
+  String banksValue = '';
 
   String typeOfLoanValue = typeOfLoan.first;
   String jobStatusValue = jobStatus.first;
@@ -311,9 +201,9 @@ class _LoanRequestState extends State<LoanRequest> {
       TextEditingController();
   //###############################BUILDING####################################//
 
-  String locationValue = Location.first;
-  String constructionYearValue = constructionYear.first;
-  String typeOfBuildingValue = typeOfBuildings.first;
+  String locationValue = constantData.Locations.first;
+  String constructionYearValue = constantData.years.first.toString();
+  String typeOfBuildingValue = constantData.Type.first;
   String purposeOfBuildingValue = purposeOfBuilding.first;
   var constructionStatusValue;
   final TextEditingController Total_Area = TextEditingController();
@@ -321,14 +211,14 @@ class _LoanRequestState extends State<LoanRequest> {
   final TextEditingController blueprintId = TextEditingController();
 ///////////////////////////////Vehicle////////////////////////////////
 
-  String typeOfVehicleValue = typeOfVehicle.first;
-  String brandOfVehicleValue = brandOfVehicle.first;
+  String typeOfVehicleValue =   constantData.TYPE.first;
+  String brandOfVehicleValue =   constantData.MODEL.keys.toList().first;
 
   String cylinderValue = cylinder.first;
-  String transmissionValue = transmission.first;
+  String transmissionValue = constantData.TRANSMISSION.first;
 
-  String modelYear = vehicleModelYear.first;
-  String vehicleCountry = countryList.elementAt(70);
+  String? modelYear;
+  String vehicleCountry = countryList.elementAt(82);
   final TextEditingController Plate_Number = TextEditingController();
   final TextEditingController Horsepower = TextEditingController();
   final TextEditingController Transportation_Capacity = TextEditingController();
@@ -336,15 +226,20 @@ class _LoanRequestState extends State<LoanRequest> {
   bool isConstructionValid = false;
   bool isUtilityValid = false;
 
-  int currentIndex = 0;
+  int currentIndex = 1;
   bool isSending = false;
   void dispose() {
     _ageControl.dispose();
+    currentIndex = 0;
     super.dispose();
   }
 
   void initState() {
     super.initState();
+    modelValue = constantData.MODEL[brandOfVehicleValue]?.keys.toList().first;
+    modelYear = constantData.MODEL[brandOfVehicleValue]![modelValue]?.first.toString();
+
+    print(modelYear);
   }
 
   @override
@@ -391,7 +286,7 @@ class _LoanRequestState extends State<LoanRequest> {
         loan = Loan(
             Type_Of_Loan: typeOfLoanValue,
             Types_of_Collateral: typeOfCollateralValue,
-            Monthly_payment: int.parse(Monthly_payment.text),
+            Monthly_payment: double.parse(Monthly_payment.text),
             interest: double.parse(interest.text.replaceAll(',','')),
             loan_amount: double.parse(loan_amount.text.replaceAll(',', '')),
             Reason_for_loan: Reason_for_loan.text,
@@ -486,7 +381,7 @@ class _LoanRequestState extends State<LoanRequest> {
             Mileage: int.parse(Mileage.text),
             Plate_Number: Plate_Number.text,
             Horsepower: Horsepower.text,
-            Year_of_Manufacture: int.parse(modelYear),
+            Year_of_Manufacture: int.parse(modelYear!),
             Transportation_Capacity: Transportation_Capacity.text,
             carImage: [carImage],
             type: {'type': "1"});
@@ -700,7 +595,10 @@ class _LoanRequestState extends State<LoanRequest> {
                                 WidgetsBinding.instance.addPostFrameCallback(
                                       (_) => {
                                     // your onPressed logic
-                                    currentIndex = 2
+                                        setState(()=>{
+                                      currentIndex = 2
+                                      })
+
                                     // AwesomeDialog(
                                     //   dismissOnTouchOutside: false,
                                     //   btnOkColor: ColorResources.accentColor,
@@ -821,7 +719,7 @@ class _LoanRequestState extends State<LoanRequest> {
                                                 () => {currentIndex = 4});
                                       } else {
                                         Navigator.pushReplacementNamed(
-                                            context, RouteHelper.home);
+                                            context, RouteHelper.loanSuccess);
                                       }
                                     })
 
@@ -890,7 +788,7 @@ class _LoanRequestState extends State<LoanRequest> {
                                       (_) => {
                                     // your onPressed logic
                                     Navigator.pushReplacementNamed(
-                                        context, RouteHelper.home)
+                                        context, RouteHelper.loanSuccess)
                                     // AwesomeDialog(
                                     //   useRootNavigator: true,
                                     //   dismissOnTouchOutside: false,
@@ -1006,6 +904,7 @@ class _LoanRequestState extends State<LoanRequest> {
     // _ageControl.value.copyWith(text:value.age.toString());
     // _ageControl.text = value.age.toString();
     // print(value.Criminal_Record);
+   constantData.MODEL[brandOfVehicleValue]![modelValue]?.forEach((element) {  print(element);});
     List<List<Widget>> myW = [
       [
         SizedBox(
@@ -1052,7 +951,7 @@ class _LoanRequestState extends State<LoanRequest> {
                 });
               },
               items:
-                  educationStatus.map<DropdownMenuItem<String>>((String value) {
+                  constantData.Education.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1094,7 +993,7 @@ class _LoanRequestState extends State<LoanRequest> {
                 });
               },
               items:
-                  marriageStatus.map<DropdownMenuItem<String>>((String value) {
+                  constantData.Marriage.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1135,7 +1034,7 @@ class _LoanRequestState extends State<LoanRequest> {
                 });
               },
               items:
-                  criminalRecords.map<DropdownMenuItem<String>>((String value) {
+                  constantData.CRIME.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1264,7 +1163,7 @@ class _LoanRequestState extends State<LoanRequest> {
             color: ColorResources.textFieldColor,
             child: DropdownButton<String>(
               // value: value.Criminal_Record != null ? value.Criminal_Record : criminalRecordValue,
-              value: banksValue,
+              value: banksValue .isNotEmpty ? banksValue : null,
               iconSize: 25.0,
               isExpanded: true,
               elevation: 16,
@@ -1491,7 +1390,7 @@ class _LoanRequestState extends State<LoanRequest> {
                   locationValue = value!;
                 });
               },
-              items: Location.map<DropdownMenuItem<String>>((String value) {
+              items: constantData.Locations.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1531,12 +1430,12 @@ class _LoanRequestState extends State<LoanRequest> {
                   constructionYearValue = value!;
                 });
               },
-              items: constructionYear
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: constantData.years
+                  .map<DropdownMenuItem<String>>((int value) {
                 return DropdownMenuItem<String>(
-                  value: value,
+                  value: value.toString(),
                   child: Padding(
-                      padding: EdgeInsets.only(left: 12), child: Text(value)),
+                      padding: EdgeInsets.only(left: 12), child: Text(value.toString())),
                 );
               }).toList(),
             ),
@@ -1595,7 +1494,7 @@ class _LoanRequestState extends State<LoanRequest> {
                 });
               },
               items:
-                  typeOfBuildings.map<DropdownMenuItem<String>>((String value) {
+                  constantData.Type.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1632,6 +1531,7 @@ class _LoanRequestState extends State<LoanRequest> {
             height: SizeConfig.screenHeight! * 0.02,
           ),
           Container(
+            color: ColorResources.textFieldColor,
             child: DropdownButton<String>(
               // value: value.Criminal_Record != null ? value.Criminal_Record : criminalRecordValue,
               value: purposeOfBuildingValue,
@@ -1812,7 +1712,8 @@ class _LoanRequestState extends State<LoanRequest> {
                 });
               },
               items:
-                  typeOfVehicle.map<DropdownMenuItem<String>>((String value) {
+              constantData.TYPE
+        .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1850,15 +1751,17 @@ class _LoanRequestState extends State<LoanRequest> {
                 // This is called when the user selects an item.
                 setState(() {
                   brandOfVehicleValue = value!;
-                  modelValue = brandOfVehicleValue == 'BYD'
-                      ? bydModel.first
-                      : brandOfVehicleValue == 'Toyota'
-                          ? toyotaModel.first
-                          : isuzuModel.first;
+                  // modelValue = brandOfVehicleValue == 'BYD'
+                  //     ? bydModel.first
+                  //     : brandOfVehicleValue == 'Toyota'
+                  //         ? toyotaModel.first
+                  //         : isuzuModel.first;
+                 modelValue = constantData.MODEL[brandOfVehicleValue]?.keys.toList().first;
+                  modelYear = constantData.MODEL[brandOfVehicleValue]![modelValue]?.first.toString();
                 });
               },
               items:
-                  brandOfVehicle.map<DropdownMenuItem<String>>((String value) {
+                  constantData.MODEL.keys.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(
@@ -1893,41 +1796,51 @@ class _LoanRequestState extends State<LoanRequest> {
                 elevation: 16,
                 underline: SizedBox(),
                 onChanged: (String? value) {
+                  print( constantData.MODEL[brandOfVehicleValue]);
                   // This is called when the user selects an item.
                   setState(() {
                     // brandOfVehicleValue = value!;
                     modelValue = value!;
                   });
                 },
-                items: brandOfVehicleValue == 'BYD'
-                    ? bydModel.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Padding(
-                              padding: EdgeInsets.only(left: 12),
-                              child: Text(value)),
-                        );
-                      }).toList()
-                    : brandOfVehicleValue == "Toyota"
-                        ? toyotaModel
-                            .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 12),
-                                  child: Text(value)),
-                            );
-                          }).toList()
-                        : isuzuModel
-                            .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 12),
-                                  child: Text(value)),
-                            );
-                          }).toList()),
-          ),
+                    items:
+                    constantData.MODEL[brandOfVehicleValue]?.keys.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                    value: value,
+                    child: Padding(
+                    padding: EdgeInsets.only(left: 12), child: Text(value)),
+                    );
+                    }).toList(),
+                // items: brandOfVehicleValue == 'BYD'
+                //     ? bydModel.map<DropdownMenuItem<String>>((String value) {
+                //         return DropdownMenuItem<String>(
+                //           value: value,
+                //           child: Padding(
+                //               padding: EdgeInsets.only(left: 12),
+                //               child: Text(value)),
+                //         );
+                //       }).toList()
+                //     : brandOfVehicleValue == "Toyota"
+                //         ? toyotaModel
+                //             .map<DropdownMenuItem<String>>((String value) {
+                //             return DropdownMenuItem<String>(
+                //               value: value,
+                //               child: Padding(
+                //                   padding: EdgeInsets.only(left: 12),
+                //                   child: Text(value)),
+                //             );
+                //           }).toList()
+                //         : isuzuModel
+                //             .map<DropdownMenuItem<String>>((String value) {
+                //             return DropdownMenuItem<String>(
+                //               value: value,
+                //               child: Padding(
+                //                   padding: EdgeInsets.only(left: 12),
+                //                   child: Text(value)),
+                //             );
+                //           }).toList()),
+          )
+    ),
         ]),
         SizedBox(
           height: SizeConfig.screenHeight! * 0.03,
@@ -1951,7 +1864,7 @@ class _LoanRequestState extends State<LoanRequest> {
 
               underline: SizedBox(),
               value: modelYear,
-              hint: Text('Select a Year'),
+
               iconSize: 25.0,
               isExpanded: true,
               elevation: 16,
@@ -1961,12 +1874,11 @@ class _LoanRequestState extends State<LoanRequest> {
                   modelYear = value!;
                 });
               },
-              items: vehicleModelYear
-                  .map<DropdownMenuItem<String>>((String value) {
+              items:   constantData.MODEL[brandOfVehicleValue]![modelValue]?.map<DropdownMenuItem<String>>((int value) {
                 return DropdownMenuItem<String>(
-                  value: value,
+                  value: value.toString(),
                   child: Padding(
-                      padding: EdgeInsets.only(left: 12), child: Text(value)),
+                      padding: EdgeInsets.only(left: 12), child: Text(value.toString())),
                 );
               }).toList(),
             ),
@@ -2084,7 +1996,7 @@ class _LoanRequestState extends State<LoanRequest> {
                   transmissionValue = value!;
                 });
               },
-              items: transmission.map<DropdownMenuItem<String>>((String value) {
+              items: constantData.TRANSMISSION.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Padding(

@@ -118,6 +118,12 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                               source: employeeDataSource,
                               columns: <GridColumn>[
                                 GridColumn(
+                                    columnName: 'Detail',
+                                    label: Container(
+                                        padding: EdgeInsets.all(1.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Detail'))),
+                                GridColumn(
                                     columnName: 'Image',
                                     columnWidthMode: ColumnWidthMode.fill,
                                     label: Container(
@@ -127,12 +133,7 @@ class _CollateralsDataGridState extends State<CollateralsDataGrid> {
                                         child: Text(
                                           'Image',
                                         ))),
-                                GridColumn(
-                                    columnName: 'Detail',
-                                    label: Container(
-                                        padding: EdgeInsets.all(1.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Detail'))),
+
                                 GridColumn(
                                     columnName: currentIndex == 0
                                         ? 'Type_of_Vehicle'
@@ -373,8 +374,7 @@ class CollateralDataSource extends DataGridSource {
                       color: ColorResources.accentColor,
                     ));
               })
-        padding: EdgeInsets.all(3),
-        child: e.columnName == 'Image'
+        : e.columnName == 'Image'
             ? e.value == null
                 ? Image.asset(
                     "assets/images/collaterals.png",

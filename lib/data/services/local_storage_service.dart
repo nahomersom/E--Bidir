@@ -1,8 +1,11 @@
+import 'package:e_bidir/data/api/api_client.dart';
 import 'package:e_bidir/data/model/login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AuthService{
+import '../../repositories/user_repo.dart';
 
+class AuthService{
+  UserRepo authRepo = UserRepo(apiClient: ApiClient());
   final _storage = const FlutterSecureStorage(
       aOptions: AndroidOptions(
         encryptedSharedPreferences: true,
@@ -29,6 +32,17 @@ class AuthService{
   Future<void> removeToken() async{
     await _storage.deleteAll();
   }
-
+ Future<bool> isTokenExpired() async {
+     try{
+       var response = await authRepo.getUserProfile();
+       return false;
+     }catch(e){
+      var error = e.toString().replaceAll('Exception:', '');
+      if(error == 'Please Login to Access'){
+        return true;
+      }
+     }
+     return false;
+ }
 }
 
