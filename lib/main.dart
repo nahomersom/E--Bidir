@@ -5,6 +5,7 @@ import 'package:e_bidir/repositories/user_repo.dart';
 import 'package:e_bidir/themes/light_theme.dart';
 import 'package:e_bidir/utils/app_constants.dart';
 import 'package:e_bidir/utils/color_resource.dart';
+import 'package:e_bidir/views/screens/custom_splash.dart';
 import 'package:e_bidir/views/screens/home_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,12 +33,12 @@ void main() async {
   // await loadImage(AssetImage('assets/images/intro_2.jpeg'));
   // await loadImage(AssetImage('assets/images/intro_3.jpeg'));
   // await loadImage(AssetImage('assets/images/intro_4.jpeg'));
-  bool token = await AuthService().hasToken(AppConstants.token);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  initScreen = await prefs.getInt("initScreen") ?? 0;
-  await prefs.setInt("initScreen", 1);
-  token ? hasToken = true : hasToken = false;
-  isTokenExpired = await AuthService().isTokenExpired();
+  // bool token = await AuthService().hasToken(AppConstants.token);
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // initScreen = await prefs.getInt("initScreen") ?? 0;
+  // await prefs.setInt("initScreen", 1);
+  // token ? hasToken = true : hasToken = false;
+  // isTokenExpired = await AuthService().isTokenExpired();
   print(isTokenExpired);
   runApp(const MyApp());
 }
@@ -86,9 +87,10 @@ class MyApp extends StatelessWidget {
               theme: lightTheme,
               debugShowCheckedModeBanner: false,
               // initialRoute: RouteHelper.onBoard,
-              initialRoute:
-              (  hasToken && !isTokenExpired) ?   RouteHelper.home : initScreen == 0  ? RouteHelper.onBoard : RouteHelper.login,
+              // initialRoute:
+              // (  hasToken && !isTokenExpired) ?   RouteHelper.home : initScreen == 0  ? RouteHelper.onBoard : RouteHelper.login,
               onGenerateRoute: RouteHelper.getRoute,
+              home: CustomSplash(),
             );
           },
         ),

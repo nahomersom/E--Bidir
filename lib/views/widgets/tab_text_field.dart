@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 
 import '../../utils/color_resource.dart';
@@ -51,10 +52,10 @@ class TabTextField extends StatelessWidget {
           key: Key(formKey.toString()),
           onChanged: onChange,
           readOnly: _isReadonly,
-          inputFormatters: isMoneyField ? [CurrencyInputFormatter()] : [],
+          inputFormatters: isMoneyField ? [CurrencyInputFormatter()] : isNumberField ? [FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*'))] : [],
 
           keyboardType:
-              isNumberField ? TextInputType.number : TextInputType.text,
+              isNumberField ? TextInputType.numberWithOptions(signed: false) : TextInputType.text,
           // initialValue: 'Ikdjkajdkljfkdlj',
           //  controller: textEditingController..text = value != null ? value.toString():'',
           controller: textEditingController,

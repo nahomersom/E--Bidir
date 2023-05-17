@@ -226,7 +226,7 @@ class _LoanRequestState extends State<LoanRequest> {
   bool isConstructionValid = false;
   bool isUtilityValid = false;
 
-  int currentIndex = 1;
+  int currentIndex = 0;
   bool isSending = false;
   void dispose() {
     _ageControl.dispose();
@@ -1069,7 +1069,12 @@ class _LoanRequestState extends State<LoanRequest> {
           isMoneyField: true,
           textEditingController: loan_amount,
           onChange: (value) => {
-
+    if (value.contains('-')) {
+    loan_amount.text = value.replaceAll('-', ''),
+    loan_amount.selection = TextSelection.fromPosition(
+    TextPosition(offset: loan_amount.text.length),
+    )
+    },
             setState(() => {
               Loan_Payment_Period.text.isNotEmpty && interest.text.isNotEmpty
                   ? Monthly_payment.text = getMonthlyPayment().toString()
@@ -1325,6 +1330,7 @@ class _LoanRequestState extends State<LoanRequest> {
           textTheme: _textTheme,
           label: 'Experience',
           isFormSubmitted: isEconomicFormSubmitted,
+
           isReadonly: false,
           textEditingController: Experience_control,
         ),
@@ -1334,6 +1340,7 @@ class _LoanRequestState extends State<LoanRequest> {
         TabTextField(
           textTheme: _textTheme,
           label: 'Number Of Loans',
+          isNumberField:true,
           isFormSubmitted: isEconomicFormSubmitted,
           isReadonly: false,
           textEditingController: Number_Of_Loans_control,
@@ -1346,6 +1353,7 @@ class _LoanRequestState extends State<LoanRequest> {
           label: 'Fully Repaid Loans',
           isFormSubmitted: isEconomicFormSubmitted,
           isReadonly: false,
+          isNumberField:true,
           textEditingController: fully_repaid_loans_control,
         ),
         SizedBox(
@@ -1357,6 +1365,18 @@ class _LoanRequestState extends State<LoanRequest> {
           isFormSubmitted: isEconomicFormSubmitted,
           isReadonly: false,
           textEditingController: Total_Monthly_Income_control,
+            isNumberField: true,
+            isMoneyField: true,
+
+            onChange: (value) =>
+            {
+              if (value.contains('-')) {
+                loan_amount.text = value.replaceAll('-', ''),
+                loan_amount.selection = TextSelection.fromPosition(
+                  TextPosition(offset: loan_amount.text.length),
+                )
+              },
+            },
         ),
       ],
       [

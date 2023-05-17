@@ -1,6 +1,7 @@
 import 'package:e_bidir/helpers/route_helper.dart';
 import 'package:e_bidir/utils/color_resource.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 List<Widget> onBoardingPages = [];
 
@@ -199,8 +200,10 @@ class Introductions extends StatelessWidget {
               borderRadius: BorderRadius.circular(70),
             ),
             child: IconButton(
-              onPressed: () {
+              onPressed: () async{
                 if (moveTo == 4) {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.setInt("initScreen", 1);
                   Navigator.pushReplacementNamed(context, RouteHelper.login);
                 } else {
                   if (_pageController.hasClients) {

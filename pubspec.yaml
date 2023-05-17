@@ -63,7 +63,7 @@ dev_dependencies:
 
 flutter_native_splash:
   fullScreen: true
-  image: assets/images/l_icon.png
+  #image: assets/images/l_icon.png
   color: "#ffffff"
   android_12:
     fullScreen: true
@@ -103,6 +103,8 @@ flutter:
      - assets/images/collaterals.png
      - assets/images/buildings.png
      - assets/animations/success.json
+     - assets/images/first_half_image.jpg
+     - assets/images/second_half_image.jpg
 
   #   - images/a_dot_ham.jpeg
   fonts:

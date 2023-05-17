@@ -38,7 +38,11 @@ class AuthService{
        return false;
      }catch(e){
       var error = e.toString().replaceAll('Exception:', '');
-      if(error == 'Please Login to Access'){
+      print('ERrroro');
+      print(error);
+      if(error == 'Please Login to Access' || error == ' Error: jwt expired'){
+        print('expired');
+        print(error);
         return true;
       }
      }
